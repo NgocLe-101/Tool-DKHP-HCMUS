@@ -18,12 +18,43 @@
                 <textarea name="content" id="web-content"></textarea>
             </div>
             <div class="submit-btn">
-                <button id="submit-btn">Tạo code</button>
+                <button id="submit-btn">Tạo bảng</button>
             </div>
-            <div class="show-result-container"></div>
+            <div class="show-result-wrapper">
+                <div class="show-result-container"></div>
+                <button id="generate-code-btn" class="submit-btn">Tạo code</button>
+                <div id="code-shower-container" style="display: block;">
+                    <h2 class="title">Code</h2>
+                    <textarea name="code" id="code-shower" readonly></textarea>
+                    <button class="submit-btn" id="copy-code-btn">Copy</button>
+                </div>
+            </div>
         </div>
-        <div id="overlay-container">
-            
+        <div id="overlay-container" style="display: none;">
+            <div id="DKBTTH-overlay">
+                <div id="exit-btn-container">
+                    <button id="exit-btn">X</button>
+                </div>
+                <div id="DKBTTH-content">
+                    <h1>Đăng kí bổ sung tín chỉ học phần</h1>
+                    <div id="DKBTTH-form">
+                        <table id="TKBTTH-table">
+                            <thead class="table-heading">
+                                <th class="table-heading-element">Nhóm</th>
+                                <th class="table-heading-element">Sĩ số</th>
+                                <th class="table-heading-element">Đăng ký</th>
+                                <th class="table-heading-element">Địa điểm</th>
+                                <th class="table-heading-element">Lịch học</th>
+                                <th class="table-heading-element">Đăng ký</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="DK-btn" class="submit-btn">
+                    <button id="DK-btn">Đăng ký</button>
+                </div>
+            </div>
         </div>
     </div>
 </body>
