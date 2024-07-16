@@ -8,7 +8,7 @@ let info = {
 
 let btn = document.querySelector('button#exit-btn');
 btn.addEventListener('click', () => {
-  document.querySelector('div#overlay-container').style.display = 'none';
+  togglePopup('overlay-container');
 })
 
 let dkBtn = document.querySelector('button#DK-btn');
@@ -20,7 +20,7 @@ dkBtn.addEventListener('click', () => {
     let maLopMoID = checkedBox.className;
     let maLopMoBT = checkedBox.id;
     updateInputValue(maLopMoID, maLopMoBT);
-    document.querySelector('div#overlay-container').style.display = 'none';
+    togglePopup('overlay-container');
     // Drop the table
     let tbody = document.querySelector('#TKBTTH-table tbody');
     tbody.innerHTML = '';
@@ -83,20 +83,31 @@ genCodeBtn.addEventListener("click", () => {
   }
 });
 
+let copyBtn = document.querySelector('button#copy-code-btn');
+copyBtn.addEventListener('click',event => {
+  let codeContainer = document.querySelector('textarea#code-shower');
+  event.preventDefault();
+  navigator.clipboard.writeText(codeContainer.value);
+  alert('Copied to clipboard')
+});
+
 createTable = function() {
   let table = document.createElement('table');
   table.id = "dkhp-table";
+  table.className = "content-table";
 
   let thead = document.createElement('thead');
+  let tr = document.createElement('tr');
   let ths = Object.entries(Object.entries(doc)[0][1])
   for (const [key, value] of ths) {
     let th = document.createElement('th');
     th.innerText = key;
-    thead.appendChild(th);
+    tr.appendChild(th);
   }
   let th = document.createElement('th');
   th.innerText = "Đăng ký";
-  thead.appendChild(th);
+  tr.appendChild(th);
+  thead.appendChild(tr);
   table.appendChild(thead);
   return table;
 }
@@ -104,6 +115,7 @@ createTable = function() {
 createInputWrapper = function(entries) {
   let div = document.createElement('div');
   div.className = 'input-wrapper';
+  div.classList.add('checkbox-wrapper-13');
   let LopMoID = document.createElement('input');
   let TenLopMo = document.createElement('input');
   let SoLopBT = document.createElement('input');
@@ -143,7 +155,6 @@ createInputWrapper = function(entries) {
       SoLopBT.setAttribute('value', entries['THBT'].length);
     }
   }
-
   div.appendChild(inputCheck);
   div.appendChild(LopMoID);
   div.appendChild(TenLopMo);
@@ -188,6 +199,12 @@ showDKHP = function() {
   container.appendChild(table);
 }
 
+genCheckboxWrap = function(input) {
+  let checkboxWrap = document.createElement('div');
+  checkboxWrap.className = 'checkbox-wrapper-13';
+  checkboxWrap.appendChild(input);
+  return checkboxWrap;
+}
 
 checkDK = function (chk) {
   //checkbox <- td <- tr (id)
@@ -308,6 +325,7 @@ openBTForm = function(maLopMoId, td) {
         }
       })
       div.className = 'input-wrapper';
+      div.classList.add('checkbox-wrapper-13');
       div.appendChild(input);
       td6.appendChild(div);
 
@@ -319,12 +337,33 @@ openBTForm = function(maLopMoId, td) {
       tr.appendChild(td6);
       tbody.appendChild(tr);
     }
-    document.querySelector('div#overlay-container').style.display = 'block';
+    togglePopup('overlay-container');
   }
 }
 }
 
-
+togglePopup = function(idToToggle) {
+  let popup = document.getElementById("popup");
+  let popupContents = document.querySelectorAll("#popup div");
+  popupContents.forEach(content => {
+    if (content.id !== idToToggle) {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+    if (popup.classList.contains("show")) {
+        popup.classList.remove("show");
+        setTimeout(function() {
+            popup.style.display = "none";
+        }, 500); // Match the duration of the CSS transition
+    } else {
+        popup.style.display = "block";
+        setTimeout(function() {
+            popup.classList.add("show");
+        }, 10); // Small delay to ensure display:block is applied before opacity transition
+    }
+}
 
 endStr = `let DSMon = document.querySelectorAll('#tbDSLopHocLai tbody tr, #tbDSLopMo tbody tr')
 DSMon.forEach(tr => {
