@@ -344,14 +344,14 @@ openBTForm = function(maLopMoId, td) {
 
 togglePopup = function(idToToggle) {
   let popup = document.getElementById("popup");
-  let popupContents = document.querySelectorAll("#popup div");
-  popupContents.forEach(content => {
-    if (content.id !== idToToggle) {
-      content.style.display = "none";
+  let popupContents = popup.children;
+  for (let i = 0; i < popupContents.length; i++) {
+    if (popupContents[i].id !== idToToggle) {
+      popupContents[i].style.display = "none";
     } else {
-      content.style.display = "block";
+      popupContents[i].style.display = "block";
     }
-  });
+  }
     if (popup.classList.contains("show")) {
         popup.classList.remove("show");
         setTimeout(function() {
