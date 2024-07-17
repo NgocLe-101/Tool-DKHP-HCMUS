@@ -49,8 +49,15 @@ codeGenerateBtn = document.querySelector("#submit-btn");
 codeGenerateBtn.addEventListener("click", () => {
   const textArea = document.querySelector("#web-content");
   textContent = textArea.value;
-  doc = JSON.parse(textContent);
-  console.log(doc);
+  try {
+    doc = JSON.parse(textContent);
+    console.log(doc);
+  } catch (error) {
+    console.log(error);
+    showToast("Format không hợp lệ, vui lòng nhập lại!", TOAST_TYPE.INVALID);
+    return;
+  }
+  showToast("Đã load dữ liệu thành công!", TOAST_TYPE.SUCCESS);
   showDKHP();
   toggleHidden('paste-code-container');
 });

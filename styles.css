@@ -428,3 +428,65 @@ div#code-shower-container .submit-btn {
 div#code-shower-container.hidden {
     display: none;
 }
+
+#toast-box {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.toast {
+    width: 20vw;
+    height: 5rem;
+    background-color: #fff;
+    font-weight: 500;
+    margin: 15px 0;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    position: relative;
+    transform: translateY(100%);
+    animation: moveDown 0.5s linear forwards;
+}
+
+@keyframes moveDown {
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.toast i {
+    font-size: 1.5rem;
+    margin: 0 20px;
+}
+
+.toast::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 5px;
+    background-color: green;
+    animation: anim 5s linear forwards;
+}
+
+@keyframes anim {
+    100% {
+        width: 0;
+    }
+}
+
+.toast.error::after {
+    background-color: red;
+}
+
+.toast.invalid::after {
+    background-color: orange;
+}

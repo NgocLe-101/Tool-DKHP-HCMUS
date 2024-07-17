@@ -9,11 +9,15 @@
     <script src="scripts/main.js" defer></script>
     <script src="scripts/getMon.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c0203358a2.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -38,7 +42,7 @@
                     </div>
                 </div>
                 <div id="code-shower-container" class="hidden">
-                    <div id="confirmed-courses" >
+                    <div id="confirmed-courses">
                         <h2>Các môn đã đăng ký</h2>
                         <div id="confirmed-courses-container">
                             <table class="content-table">
@@ -57,7 +61,9 @@
                     </div>
                     <div class="submit-btn">
                         <button id="generate-code-btn">Code đăng ký</button>
-                        <button id="adjust-regis" onclick="toggleHidden('register-section-container'); toggleHidden('code-shower-container');">Chỉnh sửa đăng ký</button>
+                        <button id="adjust-regis"
+                            onclick="toggleHidden('register-section-container'); toggleHidden('code-shower-container');">Chỉnh
+                            sửa đăng ký</button>
                     </div>
                 </div>
             </div>
@@ -94,8 +100,10 @@
                     <h1>Giới thiệu & Hướng dẫn sử dụng</h1>
                     <p>Tool này giúp bạn tạo bảng đăng kí học phần từ portal của trường. Bạn chỉ cần copy đoạn text từ
                         portal và paste vào ô trên, sau đó nhấn nút "Tạo bảng".</p>
-                    <p>Tool sẽ tự động tạo bảng cho phép bạn thực hiện đăng ký như thực hiện đăng ký thông thường trên portal</p>
-                    <p>Sau khi đăng ký xong, bạn có thể copy code đăng ký học phần và paste vào <strong>console</strong> trong lúc ĐKHP để thực hiện việc đăng ký tự động</p>
+                    <p>Tool sẽ tự động tạo bảng cho phép bạn thực hiện đăng ký như thực hiện đăng ký thông thường trên
+                        portal</p>
+                    <p>Sau khi đăng ký xong, bạn có thể copy code đăng ký học phần và paste vào <strong>console</strong>
+                        trong lúc ĐKHP để thực hiện việc đăng ký tự động</p>
                     <p>Để sử dụng tool, bạn cần copy đoạn text từ portal như sau:</p>
                     <ul>
                         <li>Đăng nhập vào portal</li>
@@ -106,14 +114,50 @@
                     </ul>
                     <div class="footer">
                         <div class="submit-btn">
-                            <button id="close-intro-btn"
-                                onclick="togglePopup('intro-container')">Đóng</button>
+                            <button id="close-intro-btn" onclick="togglePopup('intro-container')">Đóng</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div id="toast-box"></div>
     </div>
 </body>
+<!--Toast notification-->
+<script>
+    const TOAST_TYPE = {
+        SUCCESS: 'success',
+        ERROR: 'error',
+        INVALID: 'invalid'
+    };
+    let toastBox = document.getElementById('toast-box');
+
+    let sucessMsg = '<i class="fa-solid fa-circle-check" style="color: green"></i> ';
+    let errorMsg = '<i class="fa-regular fa-circle-xmark" style="color: red"></i> ';
+    let invalidMsg = '<i class="fa-solid fa-circle-exclamation" style="color: orange"></i> ';
+    function showToast(message, type) {
+        let toast = document.createElement('div');
+        toast.classList.add('toast');
+        toastBox.appendChild(toast);
+
+        let msg = message;
+        
+        if (type === TOAST_TYPE.ERROR) {
+            toast.classList.add('error');
+            msg = errorMsg + message;
+        } else if (type === TOAST_TYPE.INVALID) {
+            toast.classList.add('invalid');
+            msg = invalidMsg + message;
+        } else {
+            toast.classList.add('success');
+            msg = sucessMsg + message;
+        }
+        toast.innerHTML = msg;
+        
+        setTimeout(()=> {
+            toast.remove();
+        }, 5000);
+    }
+</script>
 
 </html>
