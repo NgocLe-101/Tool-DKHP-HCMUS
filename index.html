@@ -26,28 +26,45 @@
             <div class="paste-code-container">
                 <h2>Nhập đoạn text vừa copy từ portal</h2>
                 <textarea name="content" id="web-content"></textarea>
-            </div>
-            <div class="submit-btn">
-                <button id="submit-btn">Tạo bảng</button>
+                <div class="submit-btn">
+                    <button id="submit-btn">Tạo bảng</button>
+                </div>
             </div>
             <div class="show-result-wrapper">
-                <div class="show-result-container"></div>
-                <div class="submit-btn">
-                    <button id="generate-code-btn">Tạo code</button>
+                <div class="register-section-container">
+                    <div class="show-result-container"></div>
+                    <div class="submit-btn" style="display: none;">
+                        <button id="confirm-regis">Xác nhận đăng ký</button>
+                    </div>
                 </div>
-                <div id="code-shower-container" style="display: block;">
-                    <h2 class="title">Code</h2>
-                    <textarea name="code" id="code-shower" readonly></textarea>
+                <div id="code-shower-container" class="hidden">
+                    <div id="confirmed-courses" >
+                        <h2>Các môn đã đăng ký</h2>
+                        <div id="confirmed-courses-container">
+                            <table class="content-table">
+                                <thead>
+                                    <th>Mã MH</th>
+                                    <th>Tên Môn Học</th>
+                                    <th>Tên Lớp</th>
+                                    <th>Số TC</th>
+                                    <th>Khoá</th>
+                                    <th>Lịch Học</th>
+                                    <th>Địa điểm</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div class="submit-btn">
-                        <button id="copy-code-btn">Copy</button>
+                        <button id="generate-code-btn">Code đăng ký</button>
+                        <button id="adjust-regis" onclick="toggleHidden('register-section-container'); toggleHidden('code-shower-container');">Chỉnh sửa đăng ký</button>
                     </div>
                 </div>
             </div>
         </div>
         <div id="popup" class="popup show">
-            <!-- Your pop-up content here -->
-            <div id="overlay-container" style="display: none;">
-                <div id="DKBTTH-overlay">
+            <div id="overlay-container" style="display: none;" class="overlay-container">
+                <div id="DKBTTH-overlay" class="outer">
                     <div id="exit-btn-container" style="display: none;">
                         <button id="exit-btn">X</button>
                     </div>
@@ -72,9 +89,9 @@
                     </div>
                 </div>
             </div>
-            <div id="intro-container" style="display: block;">
+            <div id="intro-container" style="display: block;" class="overlay-container">
                 <div class="outer">
-                    <h1>Giới thiệu</h1>
+                    <h1>Giới thiệu & Hướng dẫn sử dụng</h1>
                     <p>Tool này giúp bạn tạo bảng đăng kí học phần từ portal của trường. Bạn chỉ cần copy đoạn text từ
                         portal và paste vào ô trên, sau đó nhấn nút "Tạo bảng".</p>
                     <p>Tool sẽ tự động tạo bảng và hiển thị code HTML để bạn có thể dán vào trang đăng kí học phần.</p>

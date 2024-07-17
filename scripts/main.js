@@ -40,29 +40,26 @@ updateInputValue = function(maLopMoID, maLopMoBT) {
 
 selected = [];
 
-codeGenerateBtn = document.querySelector("#submit-btn");
-
 let textContent = null;
 let doc = null;
 const DKHP_Wrapper = document.querySelector('div.show-result-container')
 
+// Event listener for the submit button
+codeGenerateBtn = document.querySelector("#submit-btn");
 codeGenerateBtn.addEventListener("click", () => {
   const textArea = document.querySelector("#web-content");
   textContent = textArea.value;
   doc = JSON.parse(textContent);
   console.log(doc);
   showDKHP();
+  toggleHidden('paste-code-container');
 });
 
 let genCodeBtn = document.querySelector("button#generate-code-btn");
-genCodeBtn.addEventListener("click", () => {
+genCodeBtn.addEventListener("click", event => {
   let codeToShow = `map = new Map();\nBTTHMap = new Map()\n`;
 
   let checked = document.querySelectorAll('#dkhp-table tbody input[type="checkbox"]:checked');
-  if (checked.length === 0) {
-    alert('Chưa chọn lớp nào');
-    return;
-  } else {
     checked.forEach(check => {
         let inputWrapper = check.parentElement;
         let td = inputWrapper.parentElement;
@@ -78,17 +75,54 @@ genCodeBtn.addEventListener("click", () => {
         codeToShow += text;
     });
     codeToShow += endStr;
-    let codeContainer = document.querySelector('textarea#code-shower');
-    codeContainer.value = codeToShow;
-  }
+    event.preventDefault();
+    navigator.clipboard.writeText(codeToShow);
+    alert('Copied to clipboard!');
 });
 
-let copyBtn = document.querySelector('button#copy-code-btn');
-copyBtn.addEventListener('click',event => {
-  let codeContainer = document.querySelector('textarea#code-shower');
-  event.preventDefault();
-  navigator.clipboard.writeText(codeContainer.value);
-  alert('Copied to clipboard')
+let confirmRegisBtn = document.querySelector('button#confirm-regis');
+confirmRegisBtn.addEventListener('click', () => {
+  let checked = document.querySelectorAll('#dkhp-table tbody input[type="checkbox"]:checked');
+  if (checked.length === 0) {
+    alert('Chưa chọn lớp nào');
+    return;
+  } else {
+    let confirmedTable = document.querySelector('div#confirmed-courses-container table tbody');
+    confirmedTable.innerHTML = '';
+    checked.forEach(check => {
+      let checkedTr = check.parentElement.parentElement.parentElement;
+      let tr = document.createElement('tr');
+      let td1 = document.createElement('td');
+      let td2 = document.createElement('td');
+      let td3 = document.createElement('td');
+      let td4 = document.createElement('td');
+      let td5 = document.createElement('td');
+      let td6 = document.createElement('td');
+      let td7 = document.createElement('td');
+
+      td1.innerText = checkedTr.children[0].innerText;
+      td2.innerText = checkedTr.children[1].innerText;
+      td3.innerText = checkedTr.children[2].innerText;
+      td4.innerText = checkedTr.children[3].innerText;
+      td5.innerText = checkedTr.children[6].innerText;
+      td6.innerText = checkedTr.children[7].innerText;
+      td7.innerText = checkedTr.children[10].innerText;
+
+      td2.classList.add('not-center-text');
+      td6.classList.add('not-center-text');
+
+      tr.appendChild(td1);
+      tr.appendChild(td2);
+      tr.appendChild(td3);
+      tr.appendChild(td4);
+      tr.appendChild(td5);
+      tr.appendChild(td6);
+      tr.appendChild(td7);
+      confirmedTable.appendChild(tr);
+    });
+    toggleHidden('code-shower-container');
+    toggleHidden('register-section-container');
+  }
 });
 
 createTable = function() {
@@ -197,6 +231,7 @@ showDKHP = function() {
   }
   table.appendChild(tbody);
   container.appendChild(table);
+  document.querySelector('div.register-section-container .submit-btn').setAttribute('style','display: flex');
 }
 
 genCheckboxWrap = function(input) {
@@ -400,3 +435,12 @@ DSMon.forEach(tr => {
 })
 
 document.querySelector('[type="submit"]').click()`;
+
+toggleHidden = function(idOrClass) {
+  let element = document.querySelector(`#${idOrClass}, .${idOrClass}`);
+  if (element.classList.contains('hidden')) {
+    element.classList.remove('hidden');
+  } else {
+    element.classList.add('hidden');
+  }
+}
