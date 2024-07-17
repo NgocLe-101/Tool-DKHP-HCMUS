@@ -490,3 +490,15 @@ div#code-shower-container.hidden {
 .toast.invalid::after {
     background-color: orange;
 }
+
+a#guild-videos {
+    color: #24438b;
+}
+
+a#guild-videos:hover {
+    color: #bfceef;
+}
+
+a#guild-videos i{
+    margin: 0 0.5rem;
+}
