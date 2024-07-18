@@ -16,6 +16,10 @@ document.querySelector('button#close-intro-btn').addEventListener('click', () =>
   togglePopup('intro-container');
 });
 
+document.querySelector(`.register-section-container div#status-bar p[id='max-tc']`).innerText = TC_TOIDA;
+document.querySelector(`.register-section-container div#status-bar p[id='registed-tc']`).innerText = info.SoTCDaDK;
+document.querySelector(`.register-section-container div#status-bar p[id='cur-tc']`).innerText = info.tongTC;
+
 let schedule = new Schedule();
 
 let btn = document.querySelector("button#exit-btn");
@@ -109,6 +113,7 @@ codeGenerateBtn.addEventListener("click", () => {
   showToast("Đã load dữ liệu thành công!", TOAST_TYPE.SUCCESS);
   showDKHP();
   toggleHidden("paste-code-container");
+  toggleHidden('show-result-wrapper');
 });
 
 let genCodeBtn = document.querySelector("button#generate-code-btn");
@@ -346,6 +351,7 @@ const checkDK = function (chk) {
     schedule.removeDate(tr);
     clearTHBTValue(maLopMoId);
   }
+  updateStatusBar();
   // dkhp.specialMsg = "";
   // if ($(chk).is(":checked")) {
   //   if (info.SoTCDaDK + info.tongTC + sotc > TC_TOIDA) {
@@ -538,3 +544,7 @@ const toggleHidden = function (idOrClass) {
     element.classList.add("hidden");
   }
 };
+
+const updateStatusBar = function() {
+  document.querySelector(`.register-section-container div#status-bar p[id='cur-tc']`).innerText = info.tongTC;
+}
