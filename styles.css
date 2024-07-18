@@ -207,7 +207,7 @@ div.outer {
     padding: 1em 2em;
     --width: 50%;
     position: absolute;
-    top: 30vh;
+    top: 15vh;
     left: calc(50vw - var(--width) / 2);
     width: 50%;
     height: auto;
@@ -284,7 +284,8 @@ button {
 
 button#exit-btn {
     position: absolute;
-    right: -10px;
+    top: -1rem;
+    right: -1.5rem;
     padding: 10px 20px;
     font-size: 1rem;
     background-color: #dc3545;
@@ -382,7 +383,7 @@ div#DK-btn {
     position: fixed;
     top: 0;
     left: 0;
-    transform: translate(-50%, -50%);
+    width: 100%;
     background-color: white;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -474,7 +475,7 @@ div#code-shower-container.hidden {
     width: 100%;
     height: 5px;
     background-color: green;
-    animation: anim 5s linear forwards;
+    animation: anim 3s linear forwards;
 }
 
 @keyframes anim {

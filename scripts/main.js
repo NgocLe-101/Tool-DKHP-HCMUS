@@ -1,3 +1,4 @@
+import Schedule from "./Schedule.js";
 // CONST
 const TC_TOIDA = 25;
 
@@ -6,9 +7,30 @@ let info = {
   tongTC: 0,
 };
 
+document.querySelector('button#adjust-regis').addEventListener('click', () => {
+  toggleHidden('register-section-container'); 
+  toggleHidden('code-shower-container');
+});
+
+document.querySelector('button#close-intro-btn').addEventListener('click', () => { 
+  togglePopup('intro-container');
+});
+
+let schedule = new Schedule();
+
 let btn = document.querySelector("button#exit-btn");
 btn.addEventListener("click", () => {
+  let courseID = document.querySelector('div#DKBTTH-content div#DKBTTH-form table#TKBTTH-table tbody tr').id;
+  let tr = document.querySelector(`div.show-result-container table tbody tr#${courseID}`);
+  let checkbox = tr.querySelector('input[type="checkbox"]');
+  
   togglePopup("overlay-container");
+  // Drop the table
+  let tbody = document.querySelector("#TKBTTH-table tbody");
+  tbody.innerHTML = "";
+  
+  checkbox.click();
+  
 });
 
 let dkBtn = document.querySelector("button#DK-btn");
@@ -21,35 +43,58 @@ dkBtn.addEventListener("click", () => {
   } else {
     let maLopMoID = checkedBox.className;
     let maLopMoBT = checkedBox.id;
-    updateInputValue(maLopMoID, maLopMoBT);
+    // Checkbox <- div <- td <- tr
+    let div = checkedBox.parentElement;
+    let BTtr = checkedBox.parentElement.parentElement.parentElement;
+    let lichHoc = BTtr.children[4].innerText;
+    updateInputValue(maLopMoID, maLopMoBT, lichHoc);
+    let tr = document.querySelector(`div.show-result-container table tbody tr#${BTtr.id}`);
+    let {sucess, collapses} = schedule.canBeAddedTHBT(tr);
+    if (!sucess) {
+      let collapseCourses = '';
+      collapses.forEach((course) => {
+        collapseCourses += course + ", ";
+      });
+      showToast(`Trùng lịch học ${collapseCourses}`, TOAST_TYPE.ERROR);
+      return;
+    } else {
+      schedule.addDateTHBT(
+        doc[BTtr.id]['Nhóm BT'] !== "" ? 'BT' : 'TH', 
+        doc[BTtr.id]['Tên Môn Học'], 
+        tr.children[0].innerText, 
+        lichHoc
+      );
+    }
     togglePopup("overlay-container");
     // Drop the table
     let tbody = document.querySelector("#TKBTTH-table tbody");
     tbody.innerHTML = "";
+    
   }
 });
 
-updateInputValue = function (maLopMoID, maLopMoBT) {
+const updateInputValue = function (maLopMoID, maLopMoBT, lichHoc) {
   let inputWrapper = document.querySelector(
     'table#dkhp-table tbody tr input[value="' + maLopMoID + '"]'
   ).parentElement;
-  let soLopBT = parseInt(inputWrapper.children[3].value);
-  let soLopTH = parseInt(inputWrapper.children[5].value);
+  let soLopBT = parseInt(inputWrapper.querySelector('input#SoLopBT').value);
+  let soLopTH = parseInt(inputWrapper.querySelector('input#SoLopTH').value);
   if (soLopBT > 0) {
-    inputWrapper.children[4].setAttribute("value", maLopMoBT);
+    inputWrapper.querySelector('input#MaLopMoBT').setAttribute("value", maLopMoBT);
   } else if (soLopTH > 0) {
-    inputWrapper.children[6].setAttribute("value", maLopMoBT);
+    inputWrapper.querySelector('input#MaLopMoTH').setAttribute("value", maLopMoBT);
   }
+  inputWrapper.querySelector('input#LichHoc').setAttribute("value", lichHoc);
 };
 
-selected = [];
+let selected = [];
 
 let textContent = null;
 let doc = null;
 const DKHP_Wrapper = document.querySelector("div.show-result-container");
 
 // Event listener for the submit button
-codeGenerateBtn = document.querySelector("#submit-btn");
+const codeGenerateBtn = document.querySelector("#submit-btn");
 codeGenerateBtn.addEventListener("click", () => {
   const textArea = document.querySelector("#web-content");
   textContent = textArea.value;
@@ -83,10 +128,10 @@ genCodeBtn.addEventListener("click", (event) => {
     let soLopBT = parseInt(inputWrapper.children[3].value);
     let soLopTH = parseInt(inputWrapper.children[5].value);
     if (soLopBT > 0 || soLopTH > 0) {
-      text += `BTTHMap.set('${inputWrapper.children[1].value}','${
+      text += `BTTHMap.set('${inputWrapper.querySelector('#MaLopMoID').value}','${
         soLopBT > 0
-          ? inputWrapper.children[4].value
-          : inputWrapper.children[6].value
+          ? inputWrapper.querySelector('#MaLopMoBT').value
+          : inputWrapper.querySelector('#MaLopMoTH').value
       }');\n`;
     }
     codeToShow += text;
@@ -147,7 +192,7 @@ confirmRegisBtn.addEventListener("click", () => {
   }
 });
 
-createTable = function () {
+const createTable = function () {
   let table = document.createElement("table");
   table.id = "dkhp-table";
   table.className = "content-table";
@@ -168,7 +213,7 @@ createTable = function () {
   return table;
 };
 
-createInputWrapper = function (entries) {
+const createInputWrapper = function (entries) {
   let div = document.createElement("div");
   div.className = "input-wrapper";
   div.classList.add("checkbox-wrapper-13");
@@ -178,18 +223,21 @@ createInputWrapper = function (entries) {
   let MaLopMoBT = document.createElement("input");
   let SoLopTH = document.createElement("input");
   let MaLopMoTH = document.createElement("input");
+  let LichHoc = document.createElement("input");
   LopMoID.style.display = "none";
   TenLopMo.style.display = "none";
   SoLopBT.style.display = "none";
   MaLopMoBT.style.display = "none";
   SoLopTH.style.display = "none";
   MaLopMoTH.style.display = "none";
+  LichHoc.style.display = "none";
   LopMoID.id = "MaLopMoID";
   TenLopMo.id = "TenLopMo";
   SoLopBT.id = "SoLopBT";
   MaLopMoBT.id = "MaLopMoBT";
   SoLopTH.id = "SoLopTH";
   MaLopMoTH.id = "MaLopMoTH";
+  LichHoc.id = "LichHoc";
 
   let inputCheck = document.createElement("input");
   inputCheck.type = "checkbox";
@@ -219,11 +267,12 @@ createInputWrapper = function (entries) {
   div.appendChild(MaLopMoBT);
   div.appendChild(SoLopTH);
   div.appendChild(MaLopMoTH);
+  div.appendChild(LichHoc);
 
   return div;
 };
 
-showDKHP = function () {
+const showDKHP = function () {
   let container = document.querySelector(".show-result-container");
   if (container.childElementCount > 0) {
     container.removeChild(container.firstChild);
@@ -259,14 +308,7 @@ showDKHP = function () {
     .setAttribute("style", "display: flex");
 };
 
-genCheckboxWrap = function (input) {
-  let checkboxWrap = document.createElement("div");
-  checkboxWrap.className = "checkbox-wrapper-13";
-  checkboxWrap.appendChild(input);
-  return checkboxWrap;
-};
-
-checkDK = function (chk) {
+const checkDK = function (chk) {
   //checkbox <- td <- tr (id)
   let td = chk.parentElement.parentElement;
   let tr = td.parentElement;
@@ -276,12 +318,23 @@ checkDK = function (chk) {
     if (info.SoTCDaDK + info.tongTC + sotc > TC_TOIDA) {
       chk.checked = false;
       clearTHBTValue(maLopMoId);
+      showToast("Vượt quá số tín chỉ tối đa", TOAST_TYPE.ERROR);
+      return;
+    } else if (!schedule.canBeAdded(tr).sucess) {
+      chk.checked = false;
+      clearTHBTValue(maLopMoId);
+      let collapseCourses = '';
+      schedule.canBeAdded(tr).collapses.forEach((course) => {
+        collapseCourses += course + ", ";
+      });
+      showToast(`Trùng lịch học ${collapseCourses}`, TOAST_TYPE.ERROR);
       return;
     } else {
       selected.push(maLopMoId);
       info.tongTC += sotc;
       changeDKMHState(maLopMoId, true);
       openBTForm(maLopMoId);
+      schedule.addDate(tr);
     }
   } else {
     info.tongTC -= sotc;
@@ -290,6 +343,7 @@ checkDK = function (chk) {
       selected.splice(idx, 1);
       changeDKMHState(maLopMoId, false);
     }
+    schedule.removeDate(tr);
     clearTHBTValue(maLopMoId);
   }
   // dkhp.specialMsg = "";
@@ -316,7 +370,7 @@ checkDK = function (chk) {
   // }
 };
 
-clearTHBTValue = function (maLopMoId) {
+const clearTHBTValue = function (maLopMoId) {
   let maLopMo = maLopMoId.split("-")[0];
   let input = document.querySelectorAll("table#dkhp-table tbody tr");
 
@@ -328,12 +382,13 @@ clearTHBTValue = function (maLopMoId) {
       input[i]
         .querySelector("div.input-wrapper input#MaLopMoTH")
         .setAttribute("value", "");
+      input[i].querySelector("div.input-wrapper input#LichHoc").setAttribute("value", "");
       break;
     }
   }
 };
 
-changeDKMHState = function (maLopMoId, state) {
+const changeDKMHState = function (maLopMoId, state) {
   let tr = document.getElementById(maLopMoId);
   let checkboxes = document.querySelectorAll('input[type="checkbox"]');
   checkboxes.forEach((checkbox) => {
@@ -348,20 +403,22 @@ changeDKMHState = function (maLopMoId, state) {
   });
 };
 
-openBTForm = function (maLopMoId, td) {
+const openBTForm = function (maLopMoId, td) {
   let tbody = document.querySelector("#TKBTTH-table tbody");
   if (tbody.innerHTML === "") {
     let entries = doc[maLopMoId]["THBT"];
     if (entries !== undefined) {
       for (const [key, value] of Object.entries(entries)) {
         let tr = document.createElement("tr");
+        tr.id = maLopMoId;
+
         let td1 = document.createElement("td");
         let td2 = document.createElement("td");
         let td3 = document.createElement("td");
         let td4 = document.createElement("td");
         let td5 = document.createElement("td");
         let td6 = document.createElement("td");
-
+        
         td1.innerText = value["Nhom"];
         td2.innerText = value["SiSo"];
         td3.innerText = value["DaDK"];
@@ -414,7 +471,7 @@ openBTForm = function (maLopMoId, td) {
   }
 };
 
-togglePopup = function (idToToggle) {
+const togglePopup = function (idToToggle) {
   let popup = document.getElementById("popup");
   let popupContents = popup.children;
   for (let i = 0; i < popupContents.length; i++) {
@@ -437,7 +494,7 @@ togglePopup = function (idToToggle) {
   }
 };
 
-endStr = `let DSMon = document.querySelectorAll('#tbDSLopHocLai tbody tr, #tbDSLopMo tbody tr')
+const endStr = `let DSMon = document.querySelectorAll('#tbDSLopHocLai tbody tr, #tbDSLopMo tbody tr')
 DSMon.forEach(tr => {
     const children = (tr.children)
     
@@ -473,7 +530,7 @@ DSMon.forEach(tr => {
 
 document.querySelector('[type="submit"]').click()`;
 
-toggleHidden = function (idOrClass) {
+const toggleHidden = function (idOrClass) {
   let element = document.querySelector(`#${idOrClass}, .${idOrClass}`);
   if (element.classList.contains("hidden")) {
     element.classList.remove("hidden");
