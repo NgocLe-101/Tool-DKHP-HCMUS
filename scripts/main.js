@@ -7,9 +7,14 @@ let info = {
   tongTC: 0,
 };
 
+let status_changes = {
+  schedule: true,
+}
+
 document.querySelector('button#adjust-regis').addEventListener('click', () => {
   toggleHidden('register-section-container'); 
   toggleHidden('code-shower-container');
+  status_changes.schedule = true;
 });
 
 document.querySelector('button#close-intro-btn').addEventListener('click', () => { 
@@ -35,6 +40,25 @@ btn.addEventListener("click", () => {
   
   checkbox.click();
   
+});
+
+let scheduleBtn = document.querySelector("button#show-schedule");
+scheduleBtn.addEventListener("click", () => {
+  let container = document.querySelector('div#footer-content-container');
+  if (!status_changes.schedule && container.childElementCount > 0) {
+    // hide the schedule
+    toggleHidden('footer-content-container');
+    container.focus({ focusVisible: true });
+  } else if (status_changes.schedule) {
+    // update the schedule
+    delete container.firstElementChild
+    let table = schedule.createTable();
+    container.appendChild(table);
+    container.focus({ focusVisible: true });
+  } else {
+    // do nothing
+  }
+  status_changes.schedule = false;
 });
 
 let dkBtn = document.querySelector("button#DK-btn");
