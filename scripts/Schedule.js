@@ -105,10 +105,11 @@ export default class Schedule {
         let DateString = tr.children[7].innerText;
         let DateStringSplit = DateString.split(';');
         DateStringSplit.forEach((dayString) => {
+            let DiaDiem = dayString.split('-')[2];
              dayString.match(this.regex).forEach((match)=> {
                 let day = match[1];
                 let time = match.slice(3,match.length - 1);
-                this.__addDayTime(day, time, tr.children[1].innerText);
+                this.__addDayTime(day, time, `${tr.children[1].innerText} - ${DiaDiem}`);
              });
         });
         // DateString.match(this.regex).forEach((match) => {
@@ -126,10 +127,11 @@ export default class Schedule {
     addDateTHBT(indicatorText, TenLopMo, TenLopTHBT, lichHoc) {
             let lichHocSplit = lichHoc.split(';');
             lichHocSplit.forEach((dayString) => {
+                let DiaDiem = dayString.split('-')[2];
                 dayString.match(this.regex).forEach((match)=> {
                     let day = match[1];
                     let time = match.slice(3,match.length - 1);
-                    this.__addDayTime(day, time, `${indicatorText} ${TenLopMo} - Lớp: ${TenLopTHBT}`);
+                    this.__addDayTime(day, time, `${indicatorText} ${TenLopMo} - Lớp: ${TenLopTHBT} - ${DiaDiem}`);
                 });
             });
     }

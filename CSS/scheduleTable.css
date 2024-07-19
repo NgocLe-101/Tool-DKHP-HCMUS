@@ -11,6 +11,7 @@
     margin: 15px 0;
     font-size: 0.9em;
     min-width: 400px;
+    max-width: 75vw;
     width: 100%;
     border-radius: 5px 5px 0 0;
     overflow: hidden;
@@ -81,10 +82,18 @@
 .schedule-table .tbody .tr:first-of-type .td {
     min-width: 5rem;
     width: 100%;
+    font-weight: 700;
+    font-size: medium;
 }
 
 .value-cell {
     background-color: #A6B8E0;
     border-bottom: 1px solid #263D73;
     border-top: 1px solid #263D73;
+}
+
+.schedule-table .tbody .tr .td {
+    font-weight: 500;
+    font-size: medium;
+    text-align: center;
 }
