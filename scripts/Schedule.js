@@ -1,5 +1,5 @@
 const DEFAULT_OPTIONS = {
-    regex: /T\d\(\d-\d+\)/g,
+    regex: /T\d\(\d(.\d)*-\d+(.\d)*\)/g,
     WeekDate: {
         "2": {}, // T2
         "3": {}, // T3
@@ -66,15 +66,15 @@ export default class Schedule {
 
     __canBeAdded(day, time) {
         let timeInDay = this.WeekDate[day];
-        let startTime = parseInt(time.split("-")[0]) - 1;
-        let endTime = parseInt(time.split("-")[1]) + 1;
+        let startTime = parseFloat(time.split("-")[0]) - 1;
+        let endTime = parseFloat(time.split("-")[1]) + 1;
         
         let hasTimeInStart = false;
         let hasTimeInEnd = false;
         let collapses = [];
         Object.entries(timeInDay).forEach(([range, value]) => {
-            let rangeStart = parseInt(range.split("-")[0]);
-            let rangeEnd = parseInt(range.split("-")[1]);
+            let rangeStart = parseFloat(range.split("-")[0]);
+            let rangeEnd = parseFloat(range.split("-")[1]);
             if (rangeEnd <= startTime) {
                 hasTimeInStart = true;
             } else if (endTime <= rangeStart) {
@@ -241,7 +241,7 @@ export default class Schedule {
             } else {
                 let index = 1;
                 for (let i = 0;i<timeInDays.length;i++) {
-                    let startTime = parseInt(timeInDays[i].split("-")[0]);
+                    let startTime = parseFloat(timeInDays[i].split("-")[0]);
                     if (index !== startTime) {
                         for (let j = index; j < startTime; j++) {
                             let td = document.createElement('p');
@@ -250,7 +250,7 @@ export default class Schedule {
                         }
                         index = startTime;
                     }
-                    let endTime = parseInt(timeInDays[i].split("-")[1]);
+                    let endTime = parseFloat(timeInDays[i].split("-")[1]);
                     let diff = endTime - startTime + 1;
                     let td = document.createElement('p');
                     td.className = "td";

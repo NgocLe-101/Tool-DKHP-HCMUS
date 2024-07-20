@@ -86,7 +86,12 @@ CacMon.forEach((mon) => {
   objectToStore[MaMonDK] = monObj;
 });
 
-objectToStoreTXT = JSON.stringify(objectToStore);
+let data = {
+  "tableContent": objectToStore,
+  "sharedContent": null,
+};
+
+objectToStoreTXT = JSON.stringify(data);
 const DSLopMo = document.querySelector('#ketqua-dkhp');
 let button = document.createElement('button');
 button.innerText = 'Copy';

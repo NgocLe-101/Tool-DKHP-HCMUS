@@ -176,7 +176,8 @@ codeGenerateBtn.addEventListener("click", () => {
   const textArea = document.querySelector("#web-content");
   textContent = textArea.value;
   try {
-    doc = JSON.parse(textContent);
+    let dataJSON = JSON.parse(textContent);
+    doc = dataJSON['tableContent'];
     console.log(doc);
   } catch (error) {
     console.log(error);
@@ -217,10 +218,14 @@ genCodeBtn.addEventListener("click", (event) => {
     codeToShow += text;
   });
   codeToShow += endStr;
-  event.preventDefault();
-  navigator.clipboard.writeText(codeToShow);
-  showToast("Đã copy code thành công", TOAST_TYPE.SUCCESS);
+  copyToClipboard(event, codeToShow);
 });
+
+const copyToClipboard = function(event, text) {
+  event.preventDefault();
+  navigator.clipboard.writeText(text);
+  showToast("Đã copy thành công", TOAST_TYPE.SUCCESS);
+}
 
 const generateRegistedTable = function (checked) {
   let tbody = document.createElement("tbody");
@@ -673,3 +678,28 @@ const toggleHidden = function (idOrClass) {
 const updateStatusBar = function() {
   document.querySelector(`.register-section-container div#status-bar p[id='cur-tc']`).innerText = info.tongTC;
 }
+
+let shareRegisBtn = document.querySelector('button#share-regis');
+shareRegisBtn.addEventListener('click', (event) => {
+  let data = {
+    "tableContent": null,
+    "sharedContent": {}
+  };
+  data.tableContent = doc;
+  let checked = document.querySelectorAll(
+    '#dkhp-table tbody input[type="checkbox"]:checked'
+  );
+  checked.forEach((check) => {
+    let tr = check.closest('tr');
+    let inputWrapper = check.closest('div');
+    data['sharedContent'][tr.id] = {
+      "maLopMoID": inputWrapper.querySelector('input#MaLopMoID').value,
+      "maLopMoBT": inputWrapper.querySelector('input#MaLopMoBT').value,
+      "LichHoc": inputWrapper.querySelector('input#LichHoc').value,
+      "DiaDiem": inputWrapper.querySelector('input#DiaDiem').value,
+      "TenLopMo": inputWrapper.querySelector('input#TenLopMo').value,
+    };
+  });
+  let dataStr = JSON.stringify(data);
+  copyToClipboard(event, dataStr);
+});
