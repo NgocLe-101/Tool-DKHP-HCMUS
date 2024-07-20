@@ -10,6 +10,35 @@ let info = {
 let status_changes = {
   schedule: true,
 }
+let schedule = new Schedule();
+
+let tableRows = null;
+let searchableCells = null;
+
+function removeDiacritics(text) {
+  // Step 1: Decompose the text (separate base characters and diacritics)
+  text = text.normalize('NFD');
+  
+  // Step 2: Remove diacritics
+  text = text.replace(/[\u0300-\u036f]/g, '');
+  
+  // Step 3: Replace specific Vietnamese characters
+  const vietnameseChars = {
+      'Đ': 'D', 'đ': 'd',
+      'ƒ': 'f',
+      'ơ': 'o', 'Ơ': 'O',
+      'ư': 'u', 'Ư': 'U'
+  };
+  text = text.replace(/[ĐđƒơƠưƯ]/g, char => vietnameseChars[char] || char);
+  
+  // Step 4: Remove any remaining non-ASCII characters
+  text = text.replace(/[^\x00-\x7F]/g, '');
+  
+  // Step 5: Convert to lowercase (optional, comment out if not needed)
+  text = text.toLowerCase();
+  
+  return text;
+}
 
 document.querySelector('button#adjust-regis').addEventListener('click', () => {
   toggleHidden('register-section-container'); 
@@ -25,7 +54,6 @@ document.querySelector(`.register-section-container div#status-bar p[id='max-tc'
 document.querySelector(`.register-section-container div#status-bar p[id='registed-tc']`).innerText = info.SoTCDaDK;
 document.querySelector(`.register-section-container div#status-bar p[id='cur-tc']`).innerText = info.tongTC;
 
-let schedule = new Schedule();
 
 let btn = document.querySelector("button#exit-btn");
 btn.addEventListener("click", () => {
@@ -119,7 +147,23 @@ let selected = [];
 
 let textContent = null;
 let doc = null;
-const DKHP_Wrapper = document.querySelector("div.show-result-container");
+
+const searchbarInput = document.querySelector('div#search-bar input#search-bar-input');
+searchbarInput.addEventListener('input', () => {
+  let searchValue = removeDiacritics(searchbarInput.value.toLowerCase());
+  
+  tableRows.forEach((row) => {
+    row.setAttribute('style','display: none;');
+  });
+  tableRows.filter((row) => {
+    let haveInMaMH = removeDiacritics(row.children[0].textContent.toLowerCase()).includes(searchValue);
+    let haveInTenMH = removeDiacritics(row.children[1].textContent.toLowerCase()).includes(searchValue);
+    return haveInMaMH || haveInTenMH;
+  }).forEach((filteredCell) => {
+    filteredCell.setAttribute('style','');
+  });
+
+});
 
 // Event listener for the submit button
 const codeGenerateBtn = document.querySelector("#submit-btn");
@@ -138,6 +182,8 @@ codeGenerateBtn.addEventListener("click", () => {
   showDKHP();
   toggleHidden("paste-code-container");
   toggleHidden('show-result-wrapper');
+
+  tableRows = Array.from(document.querySelectorAll('table#dkhp-table tbody tr'));
 });
 
 let genCodeBtn = document.querySelector("button#generate-code-btn");

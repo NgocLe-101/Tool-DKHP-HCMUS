@@ -327,7 +327,7 @@ div#exit-btn-container {
     margin: 0 20px;
     padding: 0 2rem;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     gap: 2em;
 }
@@ -391,6 +391,26 @@ div#exit-btn-container {
 
 .content-table tbody tr:last-of-type {
     border-bottom: 2px solid #263D73;
+}
+
+table#dkhp-table {
+    width: 80vw;
+}
+
+table#dkhp-table tr th {
+    text-wrap: nowrap;
+}
+
+table#dkhp-table tr td:nth-child(1), table#dkhp-table tr th:nth-child(1) {
+    width: 8rem;
+}
+
+table#dkhp-table tr td:nth-child(2), table#dkhp-table tr th:nth-child(2) {
+    width: 20rem;
+}
+
+table#dkhp-table tr td:nth-child(8), table#dkhp-table tr th:nth-child(8) {
+    width: 25rem;
 }
 
 div#DK-btn {
@@ -535,3 +555,30 @@ a#guild-videos i{
     margin: 0 0.5rem;
 }
 
+/* 
+Search bar
+*/
+
+div#search-bar {
+    --padding: 14px;
+    width: max-content;
+    display: flex;
+    align-items: center;
+    padding: var(--padding);
+    border-radius: 28px;
+    background-color: #f6f6f6;
+    display: flex;
+    width: 25rem;
+}
+
+div#search-bar input {
+    font-size: 1rem;
+    font-family: "Nunito", sans-serif;
+    color: #333;
+    margin-left: var(--padding);
+    border: none;
+    outline: none;
+    background: transparent;
+    margin-left: 10px;
+    flex: 1;
+}
