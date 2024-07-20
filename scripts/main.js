@@ -9,7 +9,7 @@ let info = {
 
 let status_changes = {
   schedule: true,
-}
+};
 let schedule = new Schedule();
 
 let tableRows = null;
@@ -17,69 +17,82 @@ let searchableCells = null;
 
 function removeDiacritics(text) {
   // Step 1: Decompose the text (separate base characters and diacritics)
-  text = text.normalize('NFD');
-  
+  text = text.normalize("NFD");
+
   // Step 2: Remove diacritics
-  text = text.replace(/[\u0300-\u036f]/g, '');
-  
+  text = text.replace(/[\u0300-\u036f]/g, "");
+
   // Step 3: Replace specific Vietnamese characters
   const vietnameseChars = {
-      'Đ': 'D', 'đ': 'd',
-      'ƒ': 'f',
-      'ơ': 'o', 'Ơ': 'O',
-      'ư': 'u', 'Ư': 'U'
+    Đ: "D",
+    đ: "d",
+    ƒ: "f",
+    ơ: "o",
+    Ơ: "O",
+    ư: "u",
+    Ư: "U",
   };
-  text = text.replace(/[ĐđƒơƠưƯ]/g, char => vietnameseChars[char] || char);
-  
+  text = text.replace(/[ĐđƒơƠưƯ]/g, (char) => vietnameseChars[char] || char);
+
   // Step 4: Remove any remaining non-ASCII characters
-  text = text.replace(/[^\x00-\x7F]/g, '');
-  
+  text = text.replace(/[^\x00-\x7F]/g, "");
+
   // Step 5: Convert to lowercase (optional, comment out if not needed)
   text = text.toLowerCase();
-  
+
   return text;
 }
 
-document.querySelector('button#adjust-regis').addEventListener('click', () => {
-  toggleHidden('register-section-container'); 
-  toggleHidden('code-shower-container');
+document.querySelector("button#adjust-regis").addEventListener("click", () => {
+  toggleHidden("register-section-container");
+  toggleHidden("code-shower-container");
   status_changes.schedule = true;
 });
 
-document.querySelector('button#close-intro-btn').addEventListener('click', () => { 
-  togglePopup('intro-container');
-});
+document
+  .querySelector("button#close-intro-btn")
+  .addEventListener("click", () => {
+    togglePopup("intro-container");
+  });
 
-document.querySelector(`.register-section-container div#status-bar p[id='max-tc']`).innerText = TC_TOIDA;
-document.querySelector(`.register-section-container div#status-bar p[id='registed-tc']`).innerText = info.SoTCDaDK;
-document.querySelector(`.register-section-container div#status-bar p[id='cur-tc']`).innerText = info.tongTC;
-
+document.querySelector(
+  `.register-section-container div#status-bar p[id='max-tc']`
+).innerText = TC_TOIDA;
+document.querySelector(
+  `.register-section-container div#status-bar p[id='registed-tc']`
+).innerText = info.SoTCDaDK;
+document.querySelector(
+  `.register-section-container div#status-bar p[id='cur-tc']`
+).innerText = info.tongTC;
 
 let btn = document.querySelector("button#exit-btn");
 btn.addEventListener("click", () => {
-  let courseID = document.querySelector('div#DKBTTH-content div#DKBTTH-form table#TKBTTH-table tbody tr').id;
-  let tr = document.querySelector(`div.show-result-container table tbody tr#${courseID}`);
+  let courseID = document.querySelector(
+    "div#DKBTTH-content div#DKBTTH-form table#TKBTTH-table tbody tr"
+  ).id;
+  let tr = document.querySelector(
+    `div.show-result-container table tbody tr#${courseID}`
+  );
   let checkbox = tr.querySelector('input[type="checkbox"]');
-  
+
   togglePopup("overlay-container");
   // Drop the table
   let tbody = document.querySelector("#TKBTTH-table tbody");
   tbody.innerHTML = "";
-  
+
   checkbox.click();
-  
 });
 
 let scheduleBtn = document.querySelector("button#show-schedule");
 scheduleBtn.addEventListener("click", () => {
-  let container = document.querySelector('div#footer-content-container');
+  let container = document.querySelector("div#footer-content-container");
   if (!status_changes.schedule && container.childElementCount > 0) {
     // hide the schedule
-    toggleHidden('footer-content-container');
+    toggleHidden("footer-content-container");
     container.focus({ focusVisible: true });
   } else if (status_changes.schedule) {
     // update the schedule
-    delete container.firstElementChild
+    delete container.firstElementChild;
     let table = schedule.createTable();
     container.appendChild(table);
     container.focus({ focusVisible: true });
@@ -106,10 +119,12 @@ dkBtn.addEventListener("click", () => {
     let lichHoc = BTtr.children[4].innerText;
     let diaDiem = BTtr.children[3].innerText;
     updateInputValue(maLopMoID, maLopMoBT, lichHoc, diaDiem, tenLopMo);
-    let tr = document.querySelector(`div.show-result-container table tbody tr#${BTtr.id}`);
-    let {sucess, collapses} = schedule.canBeAddedTHBT(tr);
+    let tr = document.querySelector(
+      `div.show-result-container table tbody tr#${BTtr.id}`
+    );
+    let { sucess, collapses } = schedule.canBeAddedTHBT(tr);
     if (!sucess) {
-      let collapseCourses = '';
+      let collapseCourses = "";
       collapses.forEach((course) => {
         collapseCourses += course + ", ";
       });
@@ -117,9 +132,9 @@ dkBtn.addEventListener("click", () => {
       return;
     } else {
       schedule.addDateTHBT(
-        doc[BTtr.id]['Nhóm BT'] !== "" ? 'BT' : 'TH', 
-        doc[BTtr.id]['Tên Môn Học'], 
-        tr.children[0].innerText, 
+        doc[BTtr.id]["Nhóm BT"] !== "" ? "BT" : "TH",
+        doc[BTtr.id]["Tên Môn Học"],
+        tr.children[0].innerText,
         lichHoc
       );
     }
@@ -127,25 +142,33 @@ dkBtn.addEventListener("click", () => {
     // Drop the table
     let tbody = document.querySelector("#TKBTTH-table tbody");
     tbody.innerHTML = "";
-    
   }
 });
 
-const updateInputValue = function (maLopMoID, maLopMoBT, lichHoc, diaDiem, tenLopMo) {
+const updateInputValue = function (
+  maLopMoID,
+  maLopMoBT,
+  lichHoc,
+  diaDiem,
+  tenLopMo
+) {
   let inputWrapper = document.querySelector(
     'table#dkhp-table tbody tr input[value="' + maLopMoID + '"]'
   ).parentElement;
-  let soLopBT = parseInt(inputWrapper.querySelector('input#SoLopBT').value);
-  let soLopTH = parseInt(inputWrapper.querySelector('input#SoLopTH').value);
+  let soLopBT = parseInt(inputWrapper.querySelector("input#SoLopBT").value);
+  let soLopTH = parseInt(inputWrapper.querySelector("input#SoLopTH").value);
   if (soLopBT > 0) {
-    inputWrapper.querySelector('input#MaLopMoBT').setAttribute("value", maLopMoBT);
+    inputWrapper
+      .querySelector("input#MaLopMoBT")
+      .setAttribute("value", maLopMoBT);
   } else if (soLopTH > 0) {
-    inputWrapper.querySelector('input#MaLopMoTH').setAttribute("value", maLopMoBT);
+    inputWrapper
+      .querySelector("input#MaLopMoTH")
+      .setAttribute("value", maLopMoBT);
   }
-  inputWrapper.querySelector('input#LichHoc').setAttribute("value", lichHoc);
-  inputWrapper.querySelector('input#DiaDiem').setAttribute("value", diaDiem);
-  inputWrapper.querySelector('input#TenLopMo').setAttribute("value", tenLopMo);
-
+  inputWrapper.querySelector("input#LichHoc").setAttribute("value", lichHoc);
+  inputWrapper.querySelector("input#DiaDiem").setAttribute("value", diaDiem);
+  inputWrapper.querySelector("input#TenLopMo").setAttribute("value", tenLopMo);
 };
 
 let selected = [];
@@ -153,21 +176,28 @@ let selected = [];
 let textContent = null;
 let doc = null;
 
-const searchbarInput = document.querySelector('div#search-bar input#search-bar-input');
-searchbarInput.addEventListener('input', () => {
+const searchbarInput = document.querySelector(
+  "div#search-bar input#search-bar-input"
+);
+searchbarInput.addEventListener("input", () => {
   let searchValue = removeDiacritics(searchbarInput.value.toLowerCase());
-  
-  tableRows.forEach((row) => {
-    row.setAttribute('style','display: none;');
-  });
-  tableRows.filter((row) => {
-    let haveInMaMH = removeDiacritics(row.children[0].textContent.toLowerCase()).includes(searchValue);
-    let haveInTenMH = removeDiacritics(row.children[1].textContent.toLowerCase()).includes(searchValue);
-    return haveInMaMH || haveInTenMH;
-  }).forEach((filteredCell) => {
-    filteredCell.setAttribute('style','');
-  });
 
+  tableRows.forEach((row) => {
+    row.setAttribute("style", "display: none;");
+  });
+  tableRows
+    .filter((row) => {
+      let haveInMaMH = removeDiacritics(
+        row.children[0].textContent.toLowerCase()
+      ).includes(searchValue);
+      let haveInTenMH = removeDiacritics(
+        row.children[1].textContent.toLowerCase()
+      ).includes(searchValue);
+      return haveInMaMH || haveInTenMH;
+    })
+    .forEach((filteredCell) => {
+      filteredCell.setAttribute("style", "");
+    });
 });
 
 // Event listener for the submit button
@@ -177,7 +207,7 @@ codeGenerateBtn.addEventListener("click", () => {
   textContent = textArea.value;
   try {
     let dataJSON = JSON.parse(textContent);
-    doc = dataJSON['tableContent'];
+    doc = dataJSON["tableContent"];
     console.log(doc);
   } catch (error) {
     console.log(error);
@@ -187,9 +217,11 @@ codeGenerateBtn.addEventListener("click", () => {
   showToast("Đã load dữ liệu thành công!", TOAST_TYPE.SUCCESS);
   showDKHP();
   toggleHidden("paste-code-container");
-  toggleHidden('show-result-wrapper');
+  toggleHidden("show-result-wrapper");
 
-  tableRows = Array.from(document.querySelectorAll('table#dkhp-table tbody tr'));
+  tableRows = Array.from(
+    document.querySelectorAll("table#dkhp-table tbody tr")
+  );
 });
 
 let genCodeBtn = document.querySelector("button#generate-code-btn");
@@ -209,10 +241,12 @@ genCodeBtn.addEventListener("click", (event) => {
     let soLopBT = parseInt(inputWrapper.children[3].value);
     let soLopTH = parseInt(inputWrapper.children[5].value);
     if (soLopBT > 0 || soLopTH > 0) {
-      text += `BTTHMap.set('${inputWrapper.querySelector('#MaLopMoID').value}','${
+      text += `BTTHMap.set('${
+        inputWrapper.querySelector("#MaLopMoID").value
+      }','${
         soLopBT > 0
-          ? inputWrapper.querySelector('#MaLopMoBT').value
-          : inputWrapper.querySelector('#MaLopMoTH').value
+          ? inputWrapper.querySelector("#MaLopMoBT").value
+          : inputWrapper.querySelector("#MaLopMoTH").value
       }');\n`;
     }
     codeToShow += text;
@@ -221,11 +255,11 @@ genCodeBtn.addEventListener("click", (event) => {
   copyToClipboard(event, codeToShow);
 });
 
-const copyToClipboard = function(event, text) {
+const copyToClipboard = function (event, text) {
   event.preventDefault();
   navigator.clipboard.writeText(text);
   showToast("Đã copy thành công", TOAST_TYPE.SUCCESS);
-}
+};
 
 const generateRegistedTable = function (checked) {
   let tbody = document.createElement("tbody");
@@ -260,14 +294,14 @@ const generateRegistedTable = function (checked) {
     tr.appendChild(td7);
     tbody.appendChild(tr);
 
-    let THBTText = '';
+    let THBTText = "";
 
     if (checkedTr.children[8].innerText !== "") {
-      THBTText = 'TH';
+      THBTText = "TH";
     } else if (checkedTr.children[9].innerText !== "") {
-      THBTText = 'BT';
+      THBTText = "BT";
     }
-    if (THBTText !== '') {
+    if (THBTText !== "") {
       let inputWrapper = check.parentElement;
       let THBTtr = document.createElement("tr");
       let td1 = document.createElement("td");
@@ -280,11 +314,11 @@ const generateRegistedTable = function (checked) {
 
       td1.innerText = checkedTr.children[0].innerText;
       td2.innerText = `${THBTText} - ${checkedTr.children[1].innerText}`;
-      td3.innerText = inputWrapper.querySelector('input#TenLopMo').value;
-      td4.innerText = '';
+      td3.innerText = inputWrapper.querySelector("input#TenLopMo").value;
+      td4.innerText = "";
       td5.innerText = checkedTr.children[6].innerText;
-      td6.innerText = inputWrapper.querySelector('input#LichHoc').value;
-      td7.innerText = inputWrapper.querySelector('input#DiaDiem').value;
+      td6.innerText = inputWrapper.querySelector("input#LichHoc").value;
+      td7.innerText = inputWrapper.querySelector("input#DiaDiem").value;
 
       td2.classList.add("not-center-text");
       td6.classList.add("not-center-text");
@@ -456,7 +490,7 @@ const checkDK = function (chk) {
     } else if (!schedule.canBeAdded(tr).sucess) {
       chk.checked = false;
       clearTHBTValue(maLopMoId);
-      let collapseCourses = '';
+      let collapseCourses = "";
       schedule.canBeAdded(tr).collapses.forEach((course) => {
         collapseCourses += course + ", ";
       });
@@ -516,9 +550,15 @@ const clearTHBTValue = function (maLopMoId) {
       input[i]
         .querySelector("div.input-wrapper input#MaLopMoTH")
         .setAttribute("value", "");
-      input[i].querySelector("div.input-wrapper input#LichHoc").setAttribute("value", "");
-      input[i].querySelector("div.input-wrapper input#DiaDiem").setAttribute("value", "");
-      input[i].querySelector("div.input-wrapper input#TenLopMo").setAttribute("value", "");
+      input[i]
+        .querySelector("div.input-wrapper input#LichHoc")
+        .setAttribute("value", "");
+      input[i]
+        .querySelector("div.input-wrapper input#DiaDiem")
+        .setAttribute("value", "");
+      input[i]
+        .querySelector("div.input-wrapper input#TenLopMo")
+        .setAttribute("value", "");
       break;
     }
   }
@@ -554,7 +594,7 @@ const openBTForm = function (maLopMoId, td) {
         let td4 = document.createElement("td");
         let td5 = document.createElement("td");
         let td6 = document.createElement("td");
-        
+
         td1.innerText = value["Nhom"];
         td2.innerText = value["SiSo"];
         td3.innerText = value["DaDK"];
@@ -675,29 +715,31 @@ const toggleHidden = function (idOrClass) {
   }
 };
 
-const updateStatusBar = function() {
-  document.querySelector(`.register-section-container div#status-bar p[id='cur-tc']`).innerText = info.tongTC;
-}
+const updateStatusBar = function () {
+  document.querySelector(
+    `.register-section-container div#status-bar p[id='cur-tc']`
+  ).innerText = info.tongTC;
+};
 
-let shareRegisBtn = document.querySelector('button#share-regis');
-shareRegisBtn.addEventListener('click', (event) => {
+let shareRegisBtn = document.querySelector("button#share-regis");
+shareRegisBtn.addEventListener("click", (event) => {
   let data = {
-    "tableContent": null,
-    "sharedContent": {}
+    tableContent: null,
+    sharedContent: {},
   };
   data.tableContent = doc;
   let checked = document.querySelectorAll(
     '#dkhp-table tbody input[type="checkbox"]:checked'
   );
   checked.forEach((check) => {
-    let tr = check.closest('tr');
-    let inputWrapper = check.closest('div');
-    data['sharedContent'][tr.id] = {
-      "maLopMoID": inputWrapper.querySelector('input#MaLopMoID').value,
-      "maLopMoBT": inputWrapper.querySelector('input#MaLopMoBT').value,
-      "LichHoc": inputWrapper.querySelector('input#LichHoc').value,
-      "DiaDiem": inputWrapper.querySelector('input#DiaDiem').value,
-      "TenLopMo": inputWrapper.querySelector('input#TenLopMo').value,
+    let tr = check.closest("tr");
+    let inputWrapper = check.closest("div");
+    data["sharedContent"][tr.id] = {
+      maLopMoID: inputWrapper.querySelector("input#MaLopMoID").value,
+      maLopMoBT: inputWrapper.querySelector("input#MaLopMoBT").value,
+      LichHoc: inputWrapper.querySelector("input#LichHoc").value,
+      DiaDiem: inputWrapper.querySelector("input#DiaDiem").value,
+      TenLopMo: inputWrapper.querySelector("input#TenLopMo").value,
     };
   });
   let dataStr = JSON.stringify(data);
