@@ -102,8 +102,10 @@ dkBtn.addEventListener("click", () => {
     // Checkbox <- div <- td <- tr
     let div = checkedBox.parentElement;
     let BTtr = checkedBox.parentElement.parentElement.parentElement;
+    let tenLopMo = BTtr.children[0].innerText;
     let lichHoc = BTtr.children[4].innerText;
-    updateInputValue(maLopMoID, maLopMoBT, lichHoc);
+    let diaDiem = BTtr.children[3].innerText;
+    updateInputValue(maLopMoID, maLopMoBT, lichHoc, diaDiem, tenLopMo);
     let tr = document.querySelector(`div.show-result-container table tbody tr#${BTtr.id}`);
     let {sucess, collapses} = schedule.canBeAddedTHBT(tr);
     if (!sucess) {
@@ -129,7 +131,7 @@ dkBtn.addEventListener("click", () => {
   }
 });
 
-const updateInputValue = function (maLopMoID, maLopMoBT, lichHoc) {
+const updateInputValue = function (maLopMoID, maLopMoBT, lichHoc, diaDiem, tenLopMo) {
   let inputWrapper = document.querySelector(
     'table#dkhp-table tbody tr input[value="' + maLopMoID + '"]'
   ).parentElement;
@@ -141,6 +143,9 @@ const updateInputValue = function (maLopMoID, maLopMoBT, lichHoc) {
     inputWrapper.querySelector('input#MaLopMoTH').setAttribute("value", maLopMoBT);
   }
   inputWrapper.querySelector('input#LichHoc').setAttribute("value", lichHoc);
+  inputWrapper.querySelector('input#DiaDiem').setAttribute("value", diaDiem);
+  inputWrapper.querySelector('input#TenLopMo').setAttribute("value", tenLopMo);
+
 };
 
 let selected = [];
@@ -217,6 +222,81 @@ genCodeBtn.addEventListener("click", (event) => {
   showToast("Đã copy code thành công", TOAST_TYPE.SUCCESS);
 });
 
+const generateRegistedTable = function (checked) {
+  let tbody = document.createElement("tbody");
+  checked.forEach((check) => {
+    let checkedTr = check.parentElement.parentElement.parentElement;
+    let tr = document.createElement("tr");
+    let td1 = document.createElement("td");
+    let td2 = document.createElement("td");
+    let td3 = document.createElement("td");
+    let td4 = document.createElement("td");
+    let td5 = document.createElement("td");
+    let td6 = document.createElement("td");
+    let td7 = document.createElement("td");
+
+    td1.innerText = checkedTr.children[0].innerText;
+    td2.innerText = checkedTr.children[1].innerText;
+    td3.innerText = checkedTr.children[2].innerText;
+    td4.innerText = checkedTr.children[3].innerText;
+    td5.innerText = checkedTr.children[6].innerText;
+    td6.innerText = checkedTr.children[7].innerText;
+    td7.innerText = checkedTr.children[10].innerText;
+
+    td2.classList.add("not-center-text");
+    td6.classList.add("not-center-text");
+
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    tr.appendChild(td4);
+    tr.appendChild(td5);
+    tr.appendChild(td6);
+    tr.appendChild(td7);
+    tbody.appendChild(tr);
+
+    let THBTText = '';
+
+    if (checkedTr.children[8].innerText !== "") {
+      THBTText = 'TH';
+    } else if (checkedTr.children[9].innerText !== "") {
+      THBTText = 'BT';
+    }
+    if (THBTText !== '') {
+      let inputWrapper = check.parentElement;
+      let THBTtr = document.createElement("tr");
+      let td1 = document.createElement("td");
+      let td2 = document.createElement("td");
+      let td3 = document.createElement("td");
+      let td4 = document.createElement("td");
+      let td5 = document.createElement("td");
+      let td6 = document.createElement("td");
+      let td7 = document.createElement("td");
+
+      td1.innerText = checkedTr.children[0].innerText;
+      td2.innerText = `${THBTText} - ${checkedTr.children[1].innerText}`;
+      td3.innerText = inputWrapper.querySelector('input#TenLopMo').value;
+      td4.innerText = '';
+      td5.innerText = checkedTr.children[6].innerText;
+      td6.innerText = inputWrapper.querySelector('input#LichHoc').value;
+      td7.innerText = inputWrapper.querySelector('input#DiaDiem').value;
+
+      td2.classList.add("not-center-text");
+      td6.classList.add("not-center-text");
+
+      THBTtr.appendChild(td1);
+      THBTtr.appendChild(td2);
+      THBTtr.appendChild(td3);
+      THBTtr.appendChild(td4);
+      THBTtr.appendChild(td5);
+      THBTtr.appendChild(td6);
+      THBTtr.appendChild(td7);
+      tbody.appendChild(THBTtr);
+    }
+  });
+  return tbody;
+};
+
 let confirmRegisBtn = document.querySelector("button#confirm-regis");
 confirmRegisBtn.addEventListener("click", () => {
   let checked = document.querySelectorAll(
@@ -227,40 +307,10 @@ confirmRegisBtn.addEventListener("click", () => {
     return;
   } else {
     let confirmedTable = document.querySelector(
-      "div#confirmed-courses-container table tbody"
+      "div#confirmed-courses-container table"
     );
-    confirmedTable.innerHTML = "";
-    checked.forEach((check) => {
-      let checkedTr = check.parentElement.parentElement.parentElement;
-      let tr = document.createElement("tr");
-      let td1 = document.createElement("td");
-      let td2 = document.createElement("td");
-      let td3 = document.createElement("td");
-      let td4 = document.createElement("td");
-      let td5 = document.createElement("td");
-      let td6 = document.createElement("td");
-      let td7 = document.createElement("td");
-
-      td1.innerText = checkedTr.children[0].innerText;
-      td2.innerText = checkedTr.children[1].innerText;
-      td3.innerText = checkedTr.children[2].innerText;
-      td4.innerText = checkedTr.children[3].innerText;
-      td5.innerText = checkedTr.children[6].innerText;
-      td6.innerText = checkedTr.children[7].innerText;
-      td7.innerText = checkedTr.children[10].innerText;
-
-      td2.classList.add("not-center-text");
-      td6.classList.add("not-center-text");
-
-      tr.appendChild(td1);
-      tr.appendChild(td2);
-      tr.appendChild(td3);
-      tr.appendChild(td4);
-      tr.appendChild(td5);
-      tr.appendChild(td6);
-      tr.appendChild(td7);
-      confirmedTable.appendChild(tr);
-    });
+    confirmedTable.removeChild(confirmedTable.querySelector("tbody"));
+    confirmedTable.appendChild(generateRegistedTable(checked));
     toggleHidden("code-shower-container");
     toggleHidden("register-section-container");
     showToast("Đăng ký thành công", TOAST_TYPE.SUCCESS);
@@ -299,6 +349,7 @@ const createInputWrapper = function (entries) {
   let SoLopTH = document.createElement("input");
   let MaLopMoTH = document.createElement("input");
   let LichHoc = document.createElement("input");
+  let DiaDiem = document.createElement("input");
   LopMoID.style.display = "none";
   TenLopMo.style.display = "none";
   SoLopBT.style.display = "none";
@@ -306,6 +357,7 @@ const createInputWrapper = function (entries) {
   SoLopTH.style.display = "none";
   MaLopMoTH.style.display = "none";
   LichHoc.style.display = "none";
+  DiaDiem.style.display = "none";
   LopMoID.id = "MaLopMoID";
   TenLopMo.id = "TenLopMo";
   SoLopBT.id = "SoLopBT";
@@ -313,6 +365,7 @@ const createInputWrapper = function (entries) {
   SoLopTH.id = "SoLopTH";
   MaLopMoTH.id = "MaLopMoTH";
   LichHoc.id = "LichHoc";
+  DiaDiem.id = "DiaDiem";
 
   let inputCheck = document.createElement("input");
   inputCheck.type = "checkbox";
@@ -324,7 +377,6 @@ const createInputWrapper = function (entries) {
   });
   if (entries["THBT"] !== undefined) {
     LopMoID.setAttribute("value", entries["THBT"][0]["MaLopMoID"]);
-    TenLopMo.setAttribute("value", entries["Tên Lớp"]);
 
     // console.log(TenLopMo.value);
     SoLopBT.setAttribute("value", 0);
@@ -343,6 +395,7 @@ const createInputWrapper = function (entries) {
   div.appendChild(SoLopTH);
   div.appendChild(MaLopMoTH);
   div.appendChild(LichHoc);
+  div.appendChild(DiaDiem);
 
   return div;
 };
@@ -459,6 +512,8 @@ const clearTHBTValue = function (maLopMoId) {
         .querySelector("div.input-wrapper input#MaLopMoTH")
         .setAttribute("value", "");
       input[i].querySelector("div.input-wrapper input#LichHoc").setAttribute("value", "");
+      input[i].querySelector("div.input-wrapper input#DiaDiem").setAttribute("value", "");
+      input[i].querySelector("div.input-wrapper input#TenLopMo").setAttribute("value", "");
       break;
     }
   }
