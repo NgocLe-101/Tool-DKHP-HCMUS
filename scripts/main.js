@@ -113,8 +113,7 @@ dkBtn.addEventListener("click", () => {
     let maLopMoID = checkedBox.className;
     let maLopMoBT = checkedBox.id;
     // Checkbox <- div <- td <- tr
-    let div = checkedBox.parentElement;
-    let BTtr = checkedBox.parentElement.parentElement.parentElement;
+    let BTtr = checkedBox.closest('tr');
     let tenLopMo = BTtr.children[0].innerText;
     let lichHoc = BTtr.children[4].innerText;
     let diaDiem = BTtr.children[3].innerText;
@@ -209,15 +208,20 @@ codeGenerateBtn.addEventListener("click", () => {
     let dataJSON = JSON.parse(textContent);
     doc = dataJSON["tableContent"];
     console.log(doc);
+    showToast("Đã load dữ liệu thành công!", TOAST_TYPE.SUCCESS);
+    if (dataJSON["sharedContent"] === null) {
+    showDKHP();
+    } else {
+      showDKHP(dataJSON["sharedContent"]);
+      confirmRegisBtn.click();
+    }
+    toggleHidden("paste-code-container");
+    toggleHidden("show-result-wrapper");
   } catch (error) {
     console.log(error);
     showToast("Format không hợp lệ, vui lòng nhập lại!", TOAST_TYPE.INVALID);
     return;
   }
-  showToast("Đã load dữ liệu thành công!", TOAST_TYPE.SUCCESS);
-  showDKHP();
-  toggleHidden("paste-code-container");
-  toggleHidden("show-result-wrapper");
 
   tableRows = Array.from(
     document.querySelectorAll("table#dkhp-table tbody tr")
@@ -261,10 +265,11 @@ const copyToClipboard = function (event, text) {
   showToast("Đã copy thành công", TOAST_TYPE.SUCCESS);
 };
 
-const generateRegistedTable = function (checked) {
-  let tbody = document.createElement("tbody");
+const generateRegistedTable = function (table, checked) {
+  let tbody = table.querySelector("tbody");
+  tbody.innerHTML = "";
   checked.forEach((check) => {
-    let checkedTr = check.parentElement.parentElement.parentElement;
+    let checkedTr = check.closest("tr");
     let tr = document.createElement("tr");
     let td1 = document.createElement("td");
     let td2 = document.createElement("td");
@@ -333,7 +338,7 @@ const generateRegistedTable = function (checked) {
       tbody.appendChild(THBTtr);
     }
   });
-  return tbody;
+  table.appendChild(tbody);
 };
 
 let confirmRegisBtn = document.querySelector("button#confirm-regis");
@@ -348,8 +353,7 @@ confirmRegisBtn.addEventListener("click", () => {
     let confirmedTable = document.querySelector(
       "div#confirmed-courses-container table"
     );
-    confirmedTable.removeChild(confirmedTable.querySelector("tbody"));
-    confirmedTable.appendChild(generateRegistedTable(checked));
+    generateRegistedTable(confirmedTable,checked)
     toggleHidden("code-shower-container");
     toggleHidden("register-section-container");
     showToast("Đăng ký thành công", TOAST_TYPE.SUCCESS);
@@ -439,7 +443,7 @@ const createInputWrapper = function (entries) {
   return div;
 };
 
-const showDKHP = function () {
+const showDKHP = function (checkedTrs) {
   let container = document.querySelector(".show-result-container");
   if (container.childElementCount > 0) {
     container.removeChild(container.firstChild);
@@ -469,7 +473,25 @@ const showDKHP = function () {
     tbody.appendChild(tr);
   }
   table.appendChild(tbody);
+  
   container.appendChild(table);
+  if (checkedTrs) {
+    Object.entries(checkedTrs).forEach(([key, value])=> {
+      let row = table.querySelector(`tr#${key}`);
+      let rowInput = row.querySelector('input[type="checkbox"]');
+      rowInput.checked = true;
+      schedule.addDate(row);
+      if (value["maLopMoID"] !== "") {
+      updateInputValue(value["maLopMoID"], value["maLopMoBT"], value["LichHoc"], value["DiaDiem"], value["TenLopMo"]);
+      schedule.addDateTHBT(
+        doc[BTtr.id]["Nhóm BT"] !== "" ? "BT" : "TH",
+        doc[BTtr.id]["Tên Môn Học"],
+        row.children[0].innerText,
+        value["LichHoc"]
+      );
+      }
+    });
+  }
   document
     .querySelector("div.register-section-container .submit-btn")
     .setAttribute("style", "display: flex");
@@ -477,7 +499,7 @@ const showDKHP = function () {
 
 const checkDK = function (chk) {
   //checkbox <- td <- tr (id)
-  let td = chk.parentElement.parentElement;
+  let td = chk.closest("td");
   let tr = td.parentElement;
   let maLopMoId = tr.id;
   let sotc = parseInt(tr.children[3].innerText);
@@ -568,9 +590,9 @@ const changeDKMHState = function (maLopMoId, state) {
   let tr = document.getElementById(maLopMoId);
   let checkboxes = document.querySelectorAll('input[type="checkbox"]');
   checkboxes.forEach((checkbox) => {
-    let checkboxID = checkbox.parentElement.parentElement.parentElement.id;
+    let checkboxID = checkbox.closest('tr').id;
     let checkboxMM =
-      checkbox.parentElement.parentElement.parentElement.children[0].innerText;
+      checkbox.closest('tr').children[0].innerText;
     if (tr.children[0].innerText === checkboxMM) {
       if (checkboxID !== maLopMoId) {
         checkbox.disabled = state;
