@@ -109,5 +109,5 @@ let getCodebtn = document.querySelector('div#intro-container .outer li button');
 getCodebtn.addEventListener('click', event => {
   event.preventDefault();
   navigator.clipboard.writeText(getCode());
-  alert('Code copied to clipboard!')
+  showToast("Copy thành công!");
 });
