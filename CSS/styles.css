@@ -175,10 +175,17 @@
     border: none;
     border-radius: 5px;
     text-wrap: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .submit-btn button:hover {
     background-color: #263D73;
+}
+
+.submit-btn button svg {
+    margin-right: 10px;
 }
 
 table, th, td {
@@ -561,6 +568,7 @@ Search bar
 
 div#search-bar {
     --padding: 14px;
+    --original-width: 25rem;
     width: max-content;
     display: flex;
     align-items: center;
@@ -568,7 +576,13 @@ div#search-bar {
     border-radius: 28px;
     background-color: #f6f6f6;
     display: flex;
-    width: 25rem;
+    width: 12.5rem;
+    transition: width 0.3s;
+    overflow: hidden;
+}
+
+div#search-bar:hover, div#search-bar:focus-within {
+    width: var(--original-width);
 }
 
 div#search-bar input {

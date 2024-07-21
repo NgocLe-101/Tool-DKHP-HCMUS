@@ -85,22 +85,22 @@ btn.addEventListener("click", () => {
 
 let scheduleBtn = document.querySelector("button#show-schedule");
 scheduleBtn.addEventListener("click", () => {
+  updateScheduleTable();
+  status_changes.schedule = false;
+  toggleHidden("footer-content-container");
+});
+
+let updateScheduleTable = function() {
   let container = document.querySelector("div#footer-content-container");
-  if (!status_changes.schedule && container.childElementCount > 0) {
-    // hide the schedule
-    toggleHidden("footer-content-container");
-    container.focus({ focusVisible: true });
-  } else if (status_changes.schedule) {
+  if (status_changes.schedule) {
     // update the schedule
-    delete container.firstElementChild;
+    container.innerHTML = "";
     let table = schedule.createTable();
     container.appendChild(table);
-    container.focus({ focusVisible: true });
   } else {
     // do nothing
   }
-  status_changes.schedule = false;
-});
+}
 
 let dkBtn = document.querySelector("button#DK-btn");
 dkBtn.addEventListener("click", () => {
@@ -353,7 +353,8 @@ confirmRegisBtn.addEventListener("click", () => {
     let confirmedTable = document.querySelector(
       "div#confirmed-courses-container table"
     );
-    generateRegistedTable(confirmedTable,checked)
+    generateRegistedTable(confirmedTable,checked);
+    updateScheduleTable();
     toggleHidden("code-shower-container");
     toggleHidden("register-section-container");
     showToast("Đăng ký thành công", TOAST_TYPE.SUCCESS);

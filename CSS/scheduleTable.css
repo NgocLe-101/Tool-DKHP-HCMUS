@@ -97,3 +97,11 @@
     font-size: medium;
     text-align: center;
 }
+
+.schedule-table .tbody .tr .td.value-cell:first-of-type {
+    border-top: none;
+}
+
+.schedule-table .tbody .tr .td.value-cell:last-of-type {
+    border-bottom: none;
+}
