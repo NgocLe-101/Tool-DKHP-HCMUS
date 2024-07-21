@@ -314,6 +314,7 @@ div#exit-btn-container {
 .show-result-wrapper {
     width: 100%;
     height: 100%;
+    animation: appear 0.75s linear forwards;
 }
 
 .show-result-wrapper .register-section-container {
@@ -323,6 +324,7 @@ div#exit-btn-container {
     align-items: center;
     width: 100%;
     height: 100%;
+    animation: appear 0.75s linear forwards;
 }
 
 .register-section-container .submit-btn {
@@ -460,23 +462,49 @@ div.show-result-wrapper {
 
 div.show-result-wrapper.hidden {
     display: none;
+    animation: vanishUp 0.5s linear forwards;
 }
 
 .hidden {
     display: none;
+    animation: vanishUp 0.5s linear forwards;
 }
 
 .show-result-wrapper .register-section-container.hidden {
     display: none;
+    animation: vanishUp 0.5s linear forwards;
+}
+
+@keyframes vanishUp {
+    from {
+        display: flex;
+        opacity: 1;
+    }
+    to {
+        display: none;
+        opacity: 0;
+    }
+}
+
+@keyframes appear {
+    from {
+        transform: translateY(-20%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 div#code-shower-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: start;
+    align-items: center;
     width: 100%;
     height: 100%;
+    animation: appear 0.75s linear forwards;
 }
 
 div#code-shower-container .submit-btn {
@@ -486,6 +514,7 @@ div#code-shower-container .submit-btn {
 
 div#code-shower-container.hidden {
     display: none;
+    animation: vanishUp 0.5s linear forwards;
 }
 
 #toast-box {
@@ -512,6 +541,7 @@ div#code-shower-container.hidden {
     position: relative;
     transform: translateY(100%);
     animation: moveDown 0.5s linear forwards;
+    overflow: hidden;
 }
 
 @keyframes moveDown {
@@ -595,4 +625,14 @@ div#search-bar input {
     background: transparent;
     margin-left: 10px;
     flex: 1;
+}
+
+div#confirmed-courses {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+div#footer-content-container:not(.hidden) {
+    animation: appear 0.5s linear forwards;
 }

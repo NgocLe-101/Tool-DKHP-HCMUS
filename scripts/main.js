@@ -205,6 +205,7 @@ codeGenerateBtn.addEventListener("click", () => {
   const textArea = document.querySelector("#web-content");
   textContent = textArea.value;
   try {
+    toggleHidden("paste-code-container");
     let dataJSON = JSON.parse(textContent);
     doc = dataJSON["tableContent"];
     console.log(doc);
@@ -215,7 +216,6 @@ codeGenerateBtn.addEventListener("click", () => {
       showDKHP(dataJSON["sharedContent"]);
       confirmRegisBtn.click();
     }
-    toggleHidden("paste-code-container");
     toggleHidden("show-result-wrapper");
   } catch (error) {
     console.log(error);
@@ -350,12 +350,12 @@ confirmRegisBtn.addEventListener("click", () => {
     showToast("Chưa chọn lớp nào", TOAST_TYPE.ERROR);
     return;
   } else {
+    toggleHidden("code-shower-container");
     let confirmedTable = document.querySelector(
       "div#confirmed-courses-container table"
     );
     generateRegistedTable(confirmedTable,checked);
     updateScheduleTable();
-    toggleHidden("code-shower-container");
     toggleHidden("register-section-container");
     showToast("Đăng ký thành công", TOAST_TYPE.SUCCESS);
   }
