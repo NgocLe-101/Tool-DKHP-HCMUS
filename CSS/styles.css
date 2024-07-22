@@ -15,6 +15,7 @@
       --background: #fff;
       --disabled: #F6F8FF;
       --disabled-inner: #E1E6F9;
+      --shake-range: 2px;
       -webkit-appearance: none;
       -moz-appearance: none;
       height: 21px;
@@ -59,7 +60,7 @@
       --bc: var(--border-hover);
     }
     .checkbox-wrapper-13 input[type=checkbox]:focus {
-      box-shadow: 0 0 0 var(--focus);
+      box-shadow: 0 0 0 var(--fc, var(--focus));
     }
     .checkbox-wrapper-13 input[type=checkbox]:not(.switch) {
       width: 21px;
@@ -92,6 +93,37 @@
     }
     .checkbox-wrapper-13 input[type=checkbox]:not(.switch):checked {
       --r: 43deg;
+    }
+
+    .checkbox-wrapper-13 input[type=checkbox].invalid {
+        --b: #ffcccc;
+        --bc: #ff0000;
+        --fc: 2px rgba(242, 61, 61, 0.487);
+        animation: shake 0.5s;
+    }
+    @keyframes shake {
+        0% {
+            transform: translateX(0);
+        }
+        20% {
+            transform: translateX(calc(-1*var(--shake-range)));
+        }
+    
+        40% {
+            transform: translateX(var(--shake-range));
+        }
+    
+        60% {
+            transform: translateX(calc(-1*var(--shake-range)));
+        }
+
+        80% {
+            transform: translateX(var(--shake-range));
+        }
+    
+        100% {
+            transform: translateX(calc(-1*var(--shake-range)));
+        }
     }
 }
 
