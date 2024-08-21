@@ -90,7 +90,7 @@ scheduleBtn.addEventListener("click", () => {
   toggleHidden("footer-content-container");
 });
 
-let updateScheduleTable = function() {
+let updateScheduleTable = function () {
   let container = document.querySelector("div#footer-content-container");
   if (status_changes.schedule) {
     // update the schedule
@@ -100,7 +100,7 @@ let updateScheduleTable = function() {
   } else {
     // do nothing
   }
-}
+};
 
 let dkBtn = document.querySelector("button#DK-btn");
 dkBtn.addEventListener("click", () => {
@@ -113,7 +113,7 @@ dkBtn.addEventListener("click", () => {
     let maLopMoID = checkedBox.className;
     let maLopMoBT = checkedBox.id;
     // Checkbox <- div <- td <- tr
-    let BTtr = checkedBox.closest('tr');
+    let BTtr = checkedBox.closest("tr");
     let tenLopMo = BTtr.children[0].innerText;
     let lichHoc = BTtr.children[4].innerText;
     let diaDiem = BTtr.children[3].innerText;
@@ -204,24 +204,25 @@ const codeGenerateBtn = document.querySelector("#submit-btn");
 codeGenerateBtn.addEventListener("click", () => {
   const textArea = document.querySelector("#web-content");
   textContent = textArea.value;
+  let dataJSON;
   try {
-    toggleHidden("paste-code-container");
-    let dataJSON = JSON.parse(textContent);
-    doc = dataJSON["tableContent"];
-    console.log(doc);
-    showToast("Đã load dữ liệu thành công!", TOAST_TYPE.SUCCESS);
-    if (dataJSON["sharedContent"] === null) {
-    showDKHP();
-    } else {
-      showDKHP(dataJSON["sharedContent"]);
-      confirmRegisBtn.click();
-    }
-    toggleHidden("show-result-wrapper");
+    dataJSON = JSON.parse(textContent);
   } catch (error) {
     console.log(error);
     showToast("Format không hợp lệ, vui lòng nhập lại!", TOAST_TYPE.INVALID);
     return;
   }
+  toggleHidden("paste-code-container");
+  doc = dataJSON["tableContent"];
+  console.log(doc);
+  showToast("Đã load dữ liệu thành công!", TOAST_TYPE.SUCCESS);
+  if (dataJSON["sharedContent"] === null) {
+    showDKHP();
+  } else {
+    showDKHP(dataJSON["sharedContent"]);
+    confirmRegisBtn.click();
+  }
+  toggleHidden("show-result-wrapper");
 
   tableRows = Array.from(
     document.querySelectorAll("table#dkhp-table tbody tr")
@@ -354,7 +355,7 @@ confirmRegisBtn.addEventListener("click", () => {
     let confirmedTable = document.querySelector(
       "div#confirmed-courses-container table"
     );
-    generateRegistedTable(confirmedTable,checked);
+    generateRegistedTable(confirmedTable, checked);
     updateScheduleTable();
     toggleHidden("register-section-container");
     showToast("Đăng ký thành công", TOAST_TYPE.SUCCESS);
@@ -419,11 +420,11 @@ const createInputWrapper = function (entries) {
   inputCheck.addEventListener("click", () => {
     let validCheck = checkDK(inputCheck);
     if (!validCheck) {
-      if (!inputCheck.classList.contains('invalid')) {
-        inputCheck.classList.add('invalid');
+      if (!inputCheck.classList.contains("invalid")) {
+        inputCheck.classList.add("invalid");
       }
       setTimeout(() => {
-        inputCheck.classList.remove('invalid');
+        inputCheck.classList.remove("invalid");
       }, 500);
     }
   });
@@ -482,22 +483,28 @@ const showDKHP = function (checkedTrs) {
     tbody.appendChild(tr);
   }
   table.appendChild(tbody);
-  
+
   container.appendChild(table);
   if (checkedTrs) {
-    Object.entries(checkedTrs).forEach(([key, value])=> {
+    Object.entries(checkedTrs).forEach(([key, value]) => {
       let row = table.querySelector(`tr#${key}`);
       let rowInput = row.querySelector('input[type="checkbox"]');
       rowInput.checked = true;
       schedule.addDate(row);
       if (value["maLopMoID"] !== "") {
-      updateInputValue(value["maLopMoID"], value["maLopMoBT"], value["LichHoc"], value["DiaDiem"], value["TenLopMo"]);
-      schedule.addDateTHBT(
-        doc[BTtr.id]["Nhóm BT"] !== "" ? "BT" : "TH",
-        doc[BTtr.id]["Tên Môn Học"],
-        row.children[0].innerText,
-        value["LichHoc"]
-      );
+        updateInputValue(
+          value["maLopMoID"],
+          value["maLopMoBT"],
+          value["LichHoc"],
+          value["DiaDiem"],
+          value["TenLopMo"]
+        );
+        schedule.addDateTHBT(
+          doc[BTtr.id]["Nhóm BT"] !== "" ? "BT" : "TH",
+          doc[BTtr.id]["Tên Môn Học"],
+          row.children[0].innerText,
+          value["LichHoc"]
+        );
       }
     });
   }
@@ -578,9 +585,8 @@ const changeDKMHState = function (maLopMoId, state) {
   let tr = document.getElementById(maLopMoId);
   let checkboxes = document.querySelectorAll('input[type="checkbox"]');
   checkboxes.forEach((checkbox) => {
-    let checkboxID = checkbox.closest('tr').id;
-    let checkboxMM =
-      checkbox.closest('tr').children[0].innerText;
+    let checkboxID = checkbox.closest("tr").id;
+    let checkboxMM = checkbox.closest("tr").children[0].innerText;
     if (tr.children[0].innerText === checkboxMM) {
       if (checkboxID !== maLopMoId) {
         checkbox.disabled = state;
