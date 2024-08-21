@@ -2,9 +2,11 @@
     margin: 0;
     padding: 0;
 }
+
 :root {
     --border-width: 1px;
 }
+
 .schedule-table {
     background-color: #F3F3F3;
     border-collapse: collapse;
@@ -39,7 +41,7 @@
     border-right-style: solid;
     border-width: 1px;
     text-align: center;
-    
+
 }
 
 .schedule-table .thead .th:first-of-type {

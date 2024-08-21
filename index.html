@@ -7,7 +7,7 @@
     <title>Tool ĐKHP HCMUS</title>
     <link rel="stylesheet" href="CSS/styles.css">
     <link rel="stylesheet" href="CSS/scheduleTable.css">
-    <script src="scripts/main.js" type = "module" defer></script>
+    <script src="scripts/main.js" type="module" defer></script>
     <script src="scripts/getMon.js" defer></script>
     <link rel="icon" href="assets/hcmus-logo.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +19,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
         rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <script src="https://kit.fontawesome.com/c0203358a2.js" crossorigin="anonymous"></script>
 </head>
 
@@ -57,28 +58,44 @@
                 </div>
                 <div id="code-shower-container" class="hidden">
                     <div id="confirmed-courses">
-                            <h2>Các môn đã đăng ký</h2>
-                            <div id="confirmed-courses-container">
-                                <table class="content-table">
-                                    <thead>
-                                        <th>Mã MH</th>
-                                        <th>Tên Môn Học</th>
-                                        <th>Tên Lớp</th>
-                                        <th>Số TC</th>
-                                        <th>Khoá</th>
-                                        <th>Lịch Học</th>
-                                        <th>Địa điểm</th>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                            <div class="submit-btn">
-                                <button id="generate-code-btn"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M320-240 80-480l240-240 57 57-184 184 183 183-56 56Zm320 0-57-57 184-184-183-183 56-56 240 240-240 240Z"/></svg>Code đăng ký</button>
-                                <button id="adjust-regis"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>Chỉnh
-                                    sửa đăng ký</button>
-                                    <button id="show-schedule"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M320-400q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm160 0q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm160 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>Xem lịch</button>
-                                <button id="share-regis"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T720-200q0-17-11.5-28.5T680-240q-17 0-28.5 11.5T640-200q0 17 11.5 28.5T680-160ZM200-440q17 0 28.5-11.5T240-480q0-17-11.5-28.5T200-520q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440Zm480-280q17 0 28.5-11.5T720-760q0-17-11.5-28.5T680-800q-17 0-28.5 11.5T640-760q0 17 11.5 28.5T680-720Zm0 520ZM200-480Zm480-280Z"/></svg>Chia sẻ đăng ký</button>
-                            </div>
+                        <h2>Các môn đã đăng ký</h2>
+                        <div id="confirmed-courses-container">
+                            <table class="content-table">
+                                <thead>
+                                    <th>Mã MH</th>
+                                    <th>Tên Môn Học</th>
+                                    <th>Tên Lớp</th>
+                                    <th>Số TC</th>
+                                    <th>Khoá</th>
+                                    <th>Lịch Học</th>
+                                    <th>Địa điểm</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="submit-btn">
+                            <button id="generate-code-btn"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                    viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                    <path
+                                        d="M320-240 80-480l240-240 57 57-184 184 183 183-56 56Zm320 0-57-57 184-184-183-183 56-56 240 240-240 240Z" />
+                                </svg>Code đăng ký</button>
+                            <button id="adjust-regis"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                    viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                    <path
+                                        d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                                </svg>Chỉnh
+                                sửa đăng ký</button>
+                            <button id="show-schedule"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                    viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                    <path
+                                        d="M320-400q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm160 0q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm160 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z" />
+                                </svg>Xem lịch</button>
+                            <button id="share-regis"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                    viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                    <path
+                                        d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T720-200q0-17-11.5-28.5T680-240q-17 0-28.5 11.5T640-200q0 17 11.5 28.5T680-160ZM200-440q17 0 28.5-11.5T240-480q0-17-11.5-28.5T200-520q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440Zm480-280q17 0 28.5-11.5T720-760q0-17-11.5-28.5T680-800q-17 0-28.5 11.5T640-760q0 17 11.5 28.5T680-720Zm0 520ZM200-480Zm480-280Z" />
+                                </svg>Chia sẻ đăng ký</button>
+                        </div>
                     </div>
                     <div id="footer-content-container" class="hidden"></div>
                 </div>
@@ -120,7 +137,9 @@
                         portal</p>
                     <p>Sau khi đăng ký xong, bạn có thể copy code đăng ký học phần và paste vào <strong>console</strong>
                         trong lúc ĐKHP để thực hiện việc đăng ký tự động</p>
-                    <p>Bạn có thể sử dụng tool theo<a id="guild-videos" href="https://youtu.be/xIKMqPm9wTI" target="_blank"><i class="fa-brands fa-youtube" style="color: red"></i>video này</a> hoặc theo hướng dẫn bên dưới</p>
+                    <p>Bạn có thể sử dụng tool theo<a id="guild-videos" href="https://youtu.be/xIKMqPm9wTI"
+                            target="_blank"><i class="fa-brands fa-youtube" style="color: red"></i>video này</a> hoặc
+                        theo hướng dẫn bên dưới</p>
                     <p>Để sử dụng tool, bạn cần copy đoạn text từ portal như sau:</p>
                     <ul>
                         <li>Đăng nhập vào portal</li>
@@ -148,32 +167,32 @@
         INVALID: 'invalid'
     };
     let toastBox = document.getElementById('toast-box');
-    
+
     let sucessMsg = '<i class="fa-solid fa-circle-check" style="color: green"></i> ';
     let errorMsg = '<i class="fa-regular fa-circle-xmark" style="color: red"></i> ';
     let invalidMsg = '<i class="fa-solid fa-circle-exclamation" style="color: orange"></i> ';
     let currentActiveToastes = 0;
     function showToast(message, type) {
         if (currentActiveToastes <= 3) {
-        let toast = document.createElement('div');
-        toast.classList.add('toast');
-        toastBox.appendChild(toast);
-        currentActiveToastes++;
-        let msg = message;
-        
-        if (type === TOAST_TYPE.ERROR) {
-            toast.classList.add('error');
-            msg = errorMsg + message;
-        } else if (type === TOAST_TYPE.INVALID) {
-            toast.classList.add('invalid');
-            msg = invalidMsg + message;
-        } else {
-            toast.classList.add('success');
-            msg = sucessMsg + message;
-        }
-        toast.innerHTML = msg;
-            
-            setTimeout(()=> {
+            let toast = document.createElement('div');
+            toast.classList.add('toast');
+            toastBox.appendChild(toast);
+            currentActiveToastes++;
+            let msg = message;
+
+            if (type === TOAST_TYPE.ERROR) {
+                toast.classList.add('error');
+                msg = errorMsg + message;
+            } else if (type === TOAST_TYPE.INVALID) {
+                toast.classList.add('invalid');
+                msg = invalidMsg + message;
+            } else {
+                toast.classList.add('success');
+                msg = sucessMsg + message;
+            }
+            toast.innerHTML = msg;
+
+            setTimeout(() => {
                 currentActiveToastes--;
                 toast.remove();
             }, 3000);
