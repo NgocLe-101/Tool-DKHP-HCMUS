@@ -117,12 +117,6 @@ export default class Schedule {
         );
       });
     });
-    // DateString.match(this.regex).forEach((match) => {
-    //     console.log(match);
-    //     let day = match[1];
-    //     let time = match.slice(3,match.length - 1);
-    //     this.__addDayTime(day, time);
-    // });
   }
   __addDayTime(day, time, schedule) {
     let timeInDay = this.WeekDate[day];
