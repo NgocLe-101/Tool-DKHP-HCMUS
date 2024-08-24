@@ -91,6 +91,7 @@ scheduleBtn.addEventListener("click", () => {
 });
 
 let updateScheduleTable = function () {
+let updateScheduleTable = function () {
   let container = document.querySelector("div#footer-content-container");
   if (status_changes.schedule) {
     // update the schedule
@@ -204,24 +205,25 @@ const codeGenerateBtn = document.querySelector("#submit-btn");
 codeGenerateBtn.addEventListener("click", () => {
   const textArea = document.querySelector("#web-content");
   textContent = textArea.value;
+  let dataJSON;
   try {
-    toggleHidden("paste-code-container");
-    let dataJSON = JSON.parse(textContent);
-    doc = dataJSON["tableContent"];
-    console.log(doc);
-    showToast("Đã load dữ liệu thành công!", TOAST_TYPE.SUCCESS);
-    if (dataJSON["sharedContent"] === null) {
-      showDKHP();
-    } else {
-      showDKHP(dataJSON["sharedContent"]);
-      confirmRegisBtn.click();
-    }
-    toggleHidden("show-result-wrapper");
+    dataJSON = JSON.parse(textContent);
   } catch (error) {
     console.log(error);
     showToast("Format không hợp lệ, vui lòng nhập lại!", TOAST_TYPE.INVALID);
     return;
   }
+  toggleHidden("paste-code-container");
+  doc = dataJSON["tableContent"];
+  console.log(doc);
+  showToast("Đã load dữ liệu thành công!", TOAST_TYPE.SUCCESS);
+  if (dataJSON["sharedContent"] === null) {
+    showDKHP();
+  } else {
+    showDKHP(dataJSON["sharedContent"]);
+    confirmRegisBtn.click();
+  }
+  toggleHidden("show-result-wrapper");
 
   tableRows = Array.from(
     document.querySelectorAll("table#dkhp-table tbody tr")
@@ -417,7 +419,15 @@ const createInputWrapper = function (entries) {
     parseInt(entries["Đã ĐK"]) >= parseInt(entries["Sĩ Số"]) ? true : false;
   inputCheck.className = entries["Mã MH"];
   inputCheck.addEventListener("click", () => {
-    checkDK(inputCheck);
+    let validCheck = checkDK(inputCheck);
+    if (!validCheck) {
+      if (!inputCheck.classList.contains("invalid")) {
+        inputCheck.classList.add("invalid");
+      }
+      setTimeout(() => {
+        inputCheck.classList.remove("invalid");
+      }, 500);
+    }
   });
   if (entries["THBT"] !== undefined) {
     LopMoID.setAttribute("value", entries["THBT"][0]["MaLopMoID"]);
@@ -515,7 +525,7 @@ const checkDK = function (chk) {
       chk.checked = false;
       clearTHBTValue(maLopMoId);
       showToast("Vượt quá số tín chỉ tối đa", TOAST_TYPE.ERROR);
-      return;
+      return false;
     } else if (!schedule.canBeAdded(tr).sucess) {
       chk.checked = false;
       clearTHBTValue(maLopMoId);
@@ -524,7 +534,7 @@ const checkDK = function (chk) {
         collapseCourses += course + ", ";
       });
       showToast(`Trùng lịch học ${collapseCourses}`, TOAST_TYPE.ERROR);
-      return;
+      return false;
     } else {
       selected.push(maLopMoId);
       info.tongTC += sotc;
@@ -543,28 +553,7 @@ const checkDK = function (chk) {
     clearTHBTValue(maLopMoId);
   }
   updateStatusBar();
-  // dkhp.specialMsg = "";
-  // if ($(chk).is(":checked")) {
-  //   if (info.SoTCDaDK + info.tongTC + sotc > TC_TOIDA) {
-  //     dkhp.specialMsg = dkhp.messages.exceedSoTC;
-  //     $(chk).prop("checked", false);
-  //     clearTHBTValue(td);
-  //   } else {
-  //     dkhp.selected.push(maLopMoId);
-  //     dkhp.tongTC += sotc;
-  //     checkExistedMonHoc(maLopMoId, dkhp.getMonHocCode(maLopMoId), true);
-  //     registeringLT = true;
-  //     openBTForm(maLopMoId, td);
-  //   }
-  // } else {
-  //   dkhp.tongTC -= sotc;
-  //   var idx = $.inArray(maLopMoId, dkhp.selected);
-  //   if (idx >= 0) {
-  //     dkhp.selected.splice(idx, 1);
-  //     checkExistedMonHoc(maLopMoId, dkhp.getMonHocCode(maLopMoId), false);
-  //   }
-  //   clearTHBTValue(maLopMoId, td);
-  // }
+  return true;
 };
 
 const clearTHBTValue = function (maLopMoId) {
