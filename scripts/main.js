@@ -91,7 +91,6 @@ scheduleBtn.addEventListener("click", () => {
 });
 
 let updateScheduleTable = function () {
-let updateScheduleTable = function () {
   let container = document.querySelector("div#footer-content-container");
   if (status_changes.schedule) {
     // update the schedule
