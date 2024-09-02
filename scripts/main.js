@@ -182,7 +182,7 @@ searchbarInput.addEventListener("input", () => {
   let searchValue = removeDiacritics(searchbarInput.value.toLowerCase());
 
   tableRows.forEach((row) => {
-    row.setAttribute("style", "display: none;");
+    row.classList.add("hidden");
   });
   tableRows
     .filter((row) => {
@@ -195,7 +195,7 @@ searchbarInput.addEventListener("input", () => {
       return haveInMaMH || haveInTenMH;
     })
     .forEach((filteredCell) => {
-      filteredCell.setAttribute("style", "");
+      filteredCell.classList.remove("hidden");
     });
 });
 
