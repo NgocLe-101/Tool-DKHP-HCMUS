@@ -214,7 +214,6 @@ codeGenerateBtn.addEventListener("click", () => {
   }
   toggleHidden("paste-code-container");
   doc = dataJSON["tableContent"];
-  console.log(doc);
   showToast("Đã load dữ liệu thành công!", TOAST_TYPE.SUCCESS);
   if (dataJSON["sharedContent"] === null) {
     showDKHP();
@@ -487,8 +486,19 @@ const showDKHP = function (checkedTrs) {
   container.appendChild(table);
   if (checkedTrs) {
     Object.entries(checkedTrs).forEach(([key, value]) => {
-      let row = table.querySelector(`tr#${key}`);
-      let rowInput = row.querySelector('input[type="checkbox"]');
+      const maMH = key.split("-")[0];
+      const row = table.querySelector(`tr#${key}`);
+      const sotc = parseInt(row.children[3].innerText);
+      const otherRows = Array.from(
+        table.querySelectorAll(`tr[id^=${maMH}]`)
+      ).filter((row) => row.id !== key);
+      otherRows.forEach((row) => {
+        const checkbox = row.querySelector('input[type="checkbox"]');
+        checkbox.disabled = true;
+      });
+      const rowInput = row.querySelector('input[type="checkbox"]');
+      selected.push(key);
+      info.tongTC += sotc;
       rowInput.checked = true;
       schedule.addDate(row);
       if (value["maLopMoID"] !== "") {
