@@ -26,7 +26,7 @@ export default class Schedule {
     DateString.match(this.regex).forEach((match) => {
       let day = match[1];
       let time = match.slice(3, match.length - 1);
-      let { sucess, collapses } = this.__canBeAdded(day, time);
+      let { sucess, collapses } = this.#__canBeAdded(day, time);
       canBeAdded = canBeAdded && sucess;
       collapses.forEach((collapse) => {
         Collapses.add(collapse);
@@ -37,7 +37,7 @@ export default class Schedule {
       DateStringTHBT.match(this.regex).forEach((match) => {
         let day = match[1];
         let time = match.slice(3, match.length - 1);
-        let { sucess, collapses } = this.__canBeAdded(day, time);
+        let { sucess, collapses } = this.#__canBeAdded(day, time);
         canBeAdded = canBeAdded && sucess;
         collapses.forEach((collapse) => {
           Collapses.add(collapse);
@@ -55,7 +55,7 @@ export default class Schedule {
       DateStringTHBT.match(this.regex).forEach((match) => {
         let day = match[1];
         let time = match.slice(3, match.length - 1);
-        let { sucess, collapses } = this.__canBeAdded(day, time);
+        let { sucess, collapses } = this.#__canBeAdded(day, time);
         canBeAdded = canBeAdded && sucess;
         collapses.forEach((collapse) => {
           Collapses.add(collapse);
@@ -65,7 +65,7 @@ export default class Schedule {
     return { sucess: canBeAdded, collapses: Collapses };
   }
 
-  __canBeAdded(day, time) {
+  #__canBeAdded(day, time) {
     let timeInDay = this.WeekDate[day];
     let startTime = parseFloat(time.split("-")[0]) - 1;
     let endTime = parseFloat(time.split("-")[1]) + 1;
@@ -110,15 +110,17 @@ export default class Schedule {
       dayString.match(this.regex).forEach((match) => {
         let day = match[1];
         let time = match.slice(3, match.length - 1);
-        this.__addDayTime(
-          day,
-          time,
-          `${tr.children[1].innerText} - ${DiaDiem}`
-        );
+        let schedule = null;
+        if (DiaDiem === undefined) {
+          schedule = `${tr.children[1].innerText}`;
+        } else {
+          schedule = `${tr.children[1].innerText} - ${DiaDiem}`;
+        }
+        this.#__addDayTime(day, time, schedule);
       });
     });
   }
-  __addDayTime(day, time, schedule) {
+  #__addDayTime(day, time, schedule) {
     let timeInDay = this.WeekDate[day];
     timeInDay[time] = schedule;
   }
@@ -130,11 +132,13 @@ export default class Schedule {
       dayString.match(this.regex).forEach((match) => {
         let day = match[1];
         let time = match.slice(3, match.length - 1);
-        this.__addDayTime(
-          day,
-          time,
-          `${indicatorText} ${TenLopMo} - Lớp: ${TenLopTHBT} - ${DiaDiem}`
-        );
+        let schedule = null;
+        if (DiaDiem === undefined) {
+          schedule = `${indicatorText} ${TenLopMo} - Lớp: ${TenLopTHBT}`;
+        } else {
+          schedule = `${indicatorText} ${TenLopMo} - Lớp: ${TenLopTHBT} - ${DiaDiem}`;
+        }
+        this.#__addDayTime(day, time, schedule);
       });
     });
   }
@@ -144,19 +148,19 @@ export default class Schedule {
     DateString.match(this.regex).forEach((match) => {
       let day = match[1];
       let time = match.slice(3, match.length - 1);
-      this.__removeDayTime(day, time);
+      this.#__removeDayTime(day, time);
     });
     let DateStringTHBT = tr.lastChild.querySelector("input#LichHoc").value;
     if (DateStringTHBT !== "") {
       DateStringTHBT.match(this.regex).forEach((match) => {
         let day = match[1];
         let time = match.slice(3, match.length - 1);
-        this.__removeDayTime(day, time);
+        this.#__removeDayTime(day, time);
       });
     }
   }
 
-  __removeDayTime(day, time) {
+  #__removeDayTime(day, time) {
     let timeInDay = this.WeekDate[day];
     if (timeInDay[time]) {
       delete timeInDay[time];
@@ -167,7 +171,7 @@ export default class Schedule {
     return this.WeekDate;
   }
 
-  __createTableFrame() {
+  #__createTableFrame() {
     let table = document.createElement("div");
     table.className = "schedule-table";
     let thead = document.createElement("div");
@@ -217,7 +221,7 @@ export default class Schedule {
   }
 
   createTable() {
-    let table = this.__createTableFrame();
+    let table = this.#__createTableFrame();
     let tbody = document.createElement("div");
     tbody.className = "tbody";
     let lichHocTr = document.createElement("div");
