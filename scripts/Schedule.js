@@ -103,18 +103,20 @@ export default class Schedule {
       throw new Error("Overlapping time in schedule");
     }
     // console.log(DateString.match(this.regex));
-    let DateString = tr.children[7].innerText;
-    let DateStringSplit = DateString.split(";");
+    const DateString = tr.children[7].innerText;
+    const maLop = tr.children[2].innerText;
+    const tenMH = tr.children[1].innerText;
+    const DateStringSplit = DateString.split(";");
     DateStringSplit.forEach((dayString) => {
-      let DiaDiem = dayString.split("-")[2];
+      const DiaDiem = dayString.split("-")[2];
       dayString.match(this.regex).forEach((match) => {
-        let day = match[1];
-        let time = match.slice(3, match.length - 1);
+        const day = match[1];
+        const time = match.slice(3, match.length - 1);
         let schedule = null;
         if (DiaDiem === undefined) {
-          schedule = `${tr.children[1].innerText}`;
+          schedule = `${tenMH} - ${maLop}`;
         } else {
-          schedule = `${tr.children[1].innerText} - ${DiaDiem}`;
+          schedule = `${tenMH} - ${maLop} - ${DiaDiem}`;
         }
         this.#__addDayTime(day, time, schedule);
       });
